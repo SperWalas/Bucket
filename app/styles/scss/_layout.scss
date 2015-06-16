@@ -1,0 +1,166 @@
+
+
+/**
+ *  _layout.scss
+ *  @desc : Layout of recurrent element of the page. No style theme here
+ *
+ */
+
+
+
+
+
+/**
+ *	Header
+ */
+
+.header {
+	padding:0 100px;
+	height:80px;
+
+	&--logo {
+		display:inline-block; 
+		vertical-align:middle; 
+	}
+
+	&--nav {
+		float:right; 
+	}
+
+}
+
+
+
+/**
+ *	Footer
+ */
+
+.footer {
+	height:50px;
+	padding:0 100px;
+	nav {
+		li {
+			float:left;
+			margin-right:30px;
+		}
+	}
+}
+
+
+
+
+
+/**
+ *	Main content
+ */
+
+
+
+#main {
+	min-height:calc(100vh - 50px);
+}
+
+
+.page {
+
+
+}
+
+
+
+
+
+
+/**
+ *	Home
+ */
+
+
+.page_home {
+	width:1042px; 
+	position:absolute;
+	left:50%; top:50%; 
+	@include transform(translate(-50%, -50%));
+
+	&--intro {
+		width:560px;
+		margin-right:182px;
+		float:left; 
+		h1 {
+			margin-bottom:38px; 
+		}
+	}
+	&--from {
+		div {
+			overflow:hidden; 
+		}
+		float:left;
+		width:300px;
+		input[type="checkbox"] {
+			float:left;
+			margin-top:2px; 
+			margin-right:10px; 
+		} 
+		p  {
+			width:276px; 
+			float:right;
+		}
+		button {
+			margin-top:18px; 
+		}
+	}
+}
+
+
+
+
+
+
+
+/**
+ *	Popup
+ */
+
+
+.popup {
+	position:fixed; 
+	width:100%; height:100%; 
+	top:0; left:0;
+	z-index:1000;
+
+	&--wrap {
+		width:360px; height:auto;
+		position:absolute; 
+		top:50%; left:50%;
+		margin:0 0 0 -135px;
+		overflow:hidden; 
+		@include transform(translateY(-50%));
+	}
+
+	&--header {
+		height:60px; 
+		padding:0 30px;
+		h2 {
+			float:left; 
+		}
+		a {
+			float:right; 
+			display:block; 
+			width:15px; height:15px; 
+			margin-top: 22px;
+		}
+	}
+
+	&--container {
+		padding: 20px 30px 25px;
+		overflow:hidden; 
+	}
+
+}
+
+
+
+
+
+
+

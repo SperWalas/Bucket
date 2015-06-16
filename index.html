@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+
+    <title>Bucket</title>
+
+    <!-- Application styles. -->
+    <!-- build:[href] /styles.min.css -->
+        <link rel="stylesheet" href="/app/styles/styles.css">
+    <!-- /build -->
+</head>
+
+<body>
+         
+    <!-- Application container. -->
+    <main role="main" id="main">
+        
+        <!-- Header -->
+        <header class="header"></header>
+
+        <!-- Page container -->
+        <section class="page"></section>
+
+    </main>
+
+    <footer class="footer">
+        <nav>
+            <ul>
+                <li><a href="/about">À propos</a></li>
+                <li><a href="/help">Aide</a></li>
+                <li><a href="/privacy">Vie privée</a></li>
+            </ul>
+        </nav>
+    </footer>
+
+    <!-- Application source. -->
+    <!-- build:[src] /source.min.js -->
+        <script src="/vendors/requirejs/require.js" data-main="/app/config"></script>
+        <script src="//localhost:35729/livereload.js"></script>
+    <!-- /build -->
+    
+</body>
+</html>

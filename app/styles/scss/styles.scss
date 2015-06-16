@@ -1,0 +1,27 @@
+
+
+/**
+ *  styles.scss
+ *  @desc : Global file that include all other. Ready to build
+ */
+
+
+@import 'bourbon/bourbon';
+@import 'mixins';
+@import 'variables';
+
+
+@import 'reset';
+@import 'fonts';
+@import 'general';
+@import 'layout';
+@import 'themes';
+@import 'states';
+@import 'animations';
+
+
+@import 'modules/board/board';
+
+
+
+

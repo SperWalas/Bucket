@@ -1,0 +1,138 @@
+
+
+/**
+ *  _themes.scss
+ *  @desc : Theme of recurrent element of the page. No style of layout/display here
+ *
+ */
+
+
+
+
+
+
+/**
+ *	Header
+ */
+
+.header {
+	line-height:80px; 
+	border-bottom:1px solid #F3F3F3;
+
+	&--logo {
+		font-size:3rem; 
+		font-weight:700; 
+		color:$blue-primary;
+	}
+
+	&--nav {
+		a {
+			color:$blue-primary;
+			font-size:1.6rem; 
+			font-weight:500;
+		} 
+	}
+
+}
+
+
+
+/**
+ *	Footer
+ */
+
+.footer {
+	line-height:50px; 
+	border-top:1px solid #F9F9F9;
+	nav {
+		li {
+			a {
+				color:$text-second;
+				font-size:1.4rem; 
+			}
+		}
+	}
+}
+
+
+
+
+/**
+ *	Page
+ */
+
+
+
+
+
+/**
+ *	Home
+ */
+
+
+.page_home {
+
+	&--intro { 
+		h1 {
+			color:$text-primary;
+			line-height:1.1; 
+			font-size:3.6rem; 
+			font-weight:500;
+		}
+		p {
+			color:$text-second;
+			line-height:1.65; 
+			font-size:1.8rem;
+		}
+	}
+
+	&--from {
+		p  {
+			color:$text-third;
+			float:left; 
+			font-size:1.3rem; 
+			line-height:1.5;
+			a {
+				color:$blue-primary;
+			}
+		}
+
+	}
+}
+
+
+
+/**
+ *	Popup
+ */
+
+
+.popup {
+	background:rgba(78,81,85,.6);
+
+	&--wrap {
+		background:#f9f9f9;
+		border-radius:4px;
+	}
+
+	&--header {
+		line-height:60px;
+		background:#fff;
+		h2 {
+			font-size:1.8rem; 
+			font-weight:500; 
+			color:$text-third;
+		}
+		a {
+			text-indent:-9999px; 
+			background:url('/app/img/icon/icon-cross.svg') center no-repeat;
+			background-size:cover;
+		}
+	}
+
+	&--container {
+		
+	}
+
+}
+
