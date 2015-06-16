@@ -94,6 +94,10 @@ define([
 			e.stopPropagation();
 
 			var self = this;
+
+			// Save last email
+			self.newBucket.set('emailTag', $('.tagsinput .tag').text().split('x').join(',').slice(0, - 1));
+
 			var popupTemplate = _.template(createNameTemplate, self.newBucket.toJSON() );
 
 			self.hidePopup();
@@ -115,25 +119,22 @@ define([
 
 			// Set name in new bucket
 			self.newBucket.set("name", $('#bucket_name').val() );
-			var popupTemplate = _.template(createPeopleTemplate, self.newBucket.toJSON() );
+
+			var jSON = self.newBucket.toJSON();
+			var popupTemplate = _.template(createPeopleTemplate, jSON );
 
 			self.hidePopup();
 			self.$el.append(popupTemplate);
 
 			$('#bucket_people').tagsInput({
-			   'height': $('#bucket_people').height(),
-			   'width': $('#bucket_people').width(),
+			   'height': 'auto',
+			   'width': '100%',
 			   'interactive':true,
 			   'defaultText':'Emails des participants',
-			   // 'onAddTag':callback_function,
-			   // 'onRemoveTag':callback_function,
-			   // 'onChange' : callback_function,
-			   'delimiter': [',',';',' '],   // Or a string with a single delimiter. Ex: ';'
+			   'delimiter': [',',';',' '], 
 			   'removeWithBackspace' : true,
-			   // 'minChars' : 0,
-			   // 'maxChars' : 0, // if not provided there is no limit
 			   'placeholderColor' : '#BBB'
-			});
+			}).importTags(jSON.emailTag);
 
 		},
 
