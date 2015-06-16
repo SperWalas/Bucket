@@ -104,7 +104,18 @@ define([
 			var name = $form.find('input[name="email"]').val();
 			var password = $form.find('input[name="password"]').val();
 
-			self.session.login(name, password);
+			self.session.login(name, password, self.loginCallback.bind(self));
+		},
+
+		loginCallback: function(status) {
+
+			var self = this;
+
+			if (status) {
+				// Render next view
+			} else {
+				// Show error
+			}
 		}
 
 
