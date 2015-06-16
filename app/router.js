@@ -6,8 +6,9 @@ define([
   "modules/header/header",
   "modules/home/home",
   "modules/board/board",
+  'collections/session/model'
 
-], function(_, $, Backbone, HeaderView, HomeView, BoardView) {
+], function(_, $, Backbone, HeaderView, HomeView, BoardView, Session) {
 
 
 
@@ -29,6 +30,8 @@ define([
             var self = this;
             self.bind( "all", self.storeRoute );
             self.currentView = null;
+
+            self.session = new Session();
 
             // Init default view
             self.defaultView = 'home';
@@ -55,6 +58,13 @@ define([
             // Set default view and clean name
             module = (!module) ? this.defaultView : module;
             module = module.toLowerCase();
+
+            if (module !== this.defaultView) {
+                if (!self.session.authenticated()) {
+                    module = this.defaultView;
+                    this.navigate('/', true);
+                }
+            }
 
             // Load view asked 
             if(self[module+'View']) { 

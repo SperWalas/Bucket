@@ -8,7 +8,8 @@ require.config({
     "template": "../vendors/lodash-template-loader/loader",
     "jquery": "../vendors/jquery/dist/jquery",
     "backbone": "../vendors/backbone/backbone",
-    "jqueryTag": "../vendors/jquery.tagsinput/src/jquery.tagsinput"
+    "jqueryTag": "../vendors/jquery.tagsinput/src/jquery.tagsinput",
+    'cookies': '../vendors/cookies-js/dist/cookies.min'
   },
 
 

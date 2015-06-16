@@ -16,9 +16,11 @@ define([
   'backbone',
 
   'text!modules/home/templates/mainTemplate.html',
-  'text!modules/home/templates/popupTemplate.html'
+  'text!modules/home/templates/popupTemplate.html',
 
-], function($, _, Backbone, mainTemplate, popupTemplate) {
+  'collections/session/model'
+
+], function($, _, Backbone, mainTemplate, popupTemplate, Session) {
 
 
 	var HomeView = Backbone.View.extend({
@@ -39,7 +41,8 @@ define([
 		 
 		events: {
 			'connect' : 'showPopup',
-			'click .popup_login .popup--btn-close' : 'hidePopup'
+			'click .popup_login .popup--btn-close' : 'hidePopup',
+			'submit .popup_login form' : 'login'
 		},
 
 
@@ -51,6 +54,8 @@ define([
 		initialize: function() {
 
 			var self = this;
+
+			self.session = new Session();
 
 			$(self.elPage).html(mainTemplate);
 
@@ -86,6 +91,20 @@ define([
 			e.stopPropagation();
 			$('.popup').remove();
 
+		},
+
+		login: function(e) {
+
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $form = $(e.currentTarget);
+			var name = $form.find('input[name="email"]').val();
+			var password = $form.find('input[name="password"]').val();
+
+			self.session.login(name, password);
 		}
 
 
