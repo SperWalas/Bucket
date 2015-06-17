@@ -32,8 +32,14 @@ define([
 
         parse: function(response) {
             var contributors = [];
+            var accomplished = 0;
+            var percent = 0; 
 
             _.forEach(response.tasks, function(task) {
+
+                if (task.accomplish) {
+                    accomplished++;
+                }
 
                 _.forEach(task.contributors, function(contributor) {
 
@@ -56,7 +62,11 @@ define([
                 });
             });
 
+            percent = (accomplished / response.tasks.length) * 100;
+
             response.contributors = contributors;
+            response.percent = percent;
+            response.accomplished = accomplished;
 
             return response;
         }
