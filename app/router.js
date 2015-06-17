@@ -6,9 +6,10 @@ define([
   "modules/header/header",
   "modules/home/home",
   "modules/board/board",
+  "modules/bucket/bucket",
   'collections/session/model'
 
-], function(_, $, Backbone, HeaderView, HomeView, BoardView, Session) {
+], function(_, $, Backbone, HeaderView, HomeView, BoardView, BucketView, Session) {
 
 
 
@@ -20,7 +21,7 @@ define([
 
         // All Route
         routes: {
-            "(:module)(/)(:submodule)": "render"
+            "(:module)(/)(:id)": "render"
         },
 
 
@@ -37,6 +38,7 @@ define([
             self.defaultView = 'home';
             self.homeView = HomeView || null;
             self.boardView = BoardView || null;
+            self.bucketView = BucketView || null;
             self.headerView = new HeaderView();
 
         },
@@ -59,12 +61,12 @@ define([
             module = (!module) ? this.defaultView : module;
             module = module.toLowerCase();
 
-            if (module !== this.defaultView) {
-                if (!self.session.authenticated()) {
-                    module = this.defaultView;
-                    this.navigate('/', true);
-                }
-            }
+            // if (module !== this.defaultView) {
+            //     if (!self.session.authenticated()) {
+            //         module = this.defaultView;
+            //         this.navigate('/', true);
+            //     }
+            // }
 
             // Load view asked 
             if(self[module+'View']) { 
