@@ -70,8 +70,8 @@ define([
             });
         },
 
-        saveCredentials: function(token) {
-            Cookies.set('token', token).set('email', this.get('email'));
+        saveCredentials: function(response) {
+            Cookies.set('token', response.token).set('email', response.email).set('id', response.id);
         },
 
         deleteToken: function() {
@@ -81,6 +81,7 @@ define([
         load: function() {
             this.set('token', Cookies.get('token'));
             this.set('email', Cookies.get('email'));
+            this.set('id', Cookies.get('id'));
         }
     });
 
