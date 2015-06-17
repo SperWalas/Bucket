@@ -42,10 +42,13 @@ define([
 		// App router
 		app.router = new Router();
 
-
 		// Add goto function to navigate in view
 		Backbone.View.prototype.goToPrevious = function () {
 			app.router.goToPrevious();
+		};
+
+		Backbone.View.prototype.goToPage = function(href) {
+			app.router.navigate(href, true);
 		};
 
 		// Trigger the initial route and enable HTML5 History API support, set the root folder to '/' by default.

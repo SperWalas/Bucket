@@ -89,8 +89,12 @@ define([
 		hidePopup: function(e) {
 
 			var self = this;
-			e.preventDefault();
-			e.stopPropagation();
+
+			if (e) {
+				e.preventDefault();
+				e.stopPropagation();
+			}
+
 			$('.popup').remove();
 
 		},
@@ -114,7 +118,8 @@ define([
 			var self = this;
 
 			if (status) {
-				// Render next view
+				self.hidePopup();
+				self.goToPage('/board');
 			} else {
 				// Handle error
 			}
@@ -148,7 +153,8 @@ define([
 				// Handle error
 			} else {
 				self.session.save(response);
-				// Render next view
+				self.hidePopup();
+				self.goToPage('/board');
 			}
 		}
 
