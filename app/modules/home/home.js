@@ -18,9 +18,10 @@ define([
   'text!modules/home/templates/mainTemplate.html',
   'text!modules/home/templates/popupTemplate.html',
 
-  'collections/session/model'
+  'collections/session/model',
+  'collections/users/model'
 
-], function($, _, Backbone, mainTemplate, popupTemplate, Session) {
+], function($, _, Backbone, mainTemplate, popupTemplate, Session, User) {
 
 
 	var HomeView = Backbone.View.extend({
@@ -42,7 +43,8 @@ define([
 		events: {
 			'connect' : 'showPopup',
 			'click .popup_login .popup--btn-close' : 'hidePopup',
-			'submit .popup_login form' : 'login'
+			'submit .popup_login form' : 'login',
+			'submit .page_home form' : 'signin'
 		},
 
 
@@ -101,10 +103,10 @@ define([
 			e.stopPropagation();
 
 			var $form = $(e.currentTarget);
-			var name = $form.find('input[name="email"]').val();
+			var email = $form.find('input[name="email"]').val();
 			var password = $form.find('input[name="password"]').val();
 
-			self.session.login(name, password, self.loginCallback.bind(self));
+			self.session.login(email, password, self.loginCallback.bind(self));
 		},
 
 		loginCallback: function(status) {
@@ -114,7 +116,39 @@ define([
 			if (status) {
 				// Render next view
 			} else {
-				// Show error
+				// Handle error
+			}
+		},
+
+		signin: function(e) {
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $form = $(e.currentTarget);
+			var name = $form.find('input[name="name"]').val();
+			var email = $form.find('input[name="email"]').val();
+			var password = $form.find('input[name="password"]').val();
+
+			var user = new User({
+				name: name,
+				email: email,
+				password: password
+			});
+
+			user.save(null, {success: self.signinCallback.bind(self), error: self.signinCallback.bind(self)});
+		},
+
+		signinCallback: function(model, response, options) {
+
+			var self = this;
+
+			if (response.status) {
+				// Handle error
+			} else {
+				self.session.save(response);
+				// Render next view
 			}
 		}
 
