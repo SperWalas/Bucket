@@ -30,6 +30,37 @@ define([
         // On init model
         initialize : function() {},
 
+        parse: function(response) {
+            var contributors = [];
+
+            _.forEach(response.tasks, function(task) {
+
+                _.forEach(task.contributors, function(contributor) {
+
+                    var exist = _.find(contributors, function(value) {
+                        return value.email === contributor.email;
+                    });
+
+                    if (exist === undefined) {
+                        var data = {};
+                        data.name = contributor.name;
+                        data.email = contributor.email;
+                        data.tasks = [];
+                        data.tasks.push(task.id);
+                        contributors.push(data);
+                    } else {
+                        var index = contributors.indexOf(exist);
+                        exist.tasks.push(task.id);
+                        contributors[index] = exist;
+                    }
+                });
+            });
+
+            response.contributors = contributors;
+
+            return response;
+        }
+
 
     });
 
