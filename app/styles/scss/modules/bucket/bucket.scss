@@ -1,0 +1,271 @@
+
+
+
+/**
+ *  bucket.scss
+ *  @desc : All style about bucket
+ *
+ */
+
+
+.page_bucket {
+	
+	background:#EBEEF3;
+	min-height:calc(100vh - 80px - 50px);
+
+
+
+
+	&--header {
+		overflow: hidden;
+  		width: 100%;
+		height:80px;
+		padding:0 100px;
+		background:#fff;
+		border-bottom: 3px solid #DCDFE5;
+
+		&--intro {
+			float:left;
+		}
+
+		h1 {
+			margin:17px 0 6px; 
+			font-size:2.4rem; 
+			font-weight:300; 
+			color:$text-primary;
+		}
+
+		&--notification {
+			color:$text-second;
+			font-size:1.4rem;
+			font-weight:500; 
+			span {
+				margin-right:26px;
+			}
+		}
+
+		nav {
+			float:right;
+			a {
+				float:left; 
+				margin:17px 0 0 50px; 
+				display:block; 
+				font-size:1.4rem; 
+				font-weight:500; 
+				color:$text-primary;
+				&.btn-download i {
+					display:block;
+					width: 22px; height: 23px;
+  					margin: 0 auto 3px;
+					background:url('/app/img/icon/icon-download.svg') center no-repeat;
+					background-size:cover;
+				}
+				&.btn-print i {
+					display:block;
+					width:20px; height:20px; 
+					margin:0 auto 7px; 
+					background:url('/app/img/icon/icon-print.svg') center no-repeat;
+					background-size:cover;
+				}
+				&.btn-add-people i {
+					display:block;
+					width:23px; height:19px; 
+					margin:0 auto 7px; 
+					background:url('/app/img/icon/icon-people.svg') center no-repeat;
+					background-size:cover;
+				}
+			}
+		}
+	}
+
+
+
+
+	&--main {
+
+		.no-result {
+			position:absolute; 
+			top:50%; left:50%;
+			@include transform(translate(-50%, -50%));
+			text-align:center; 
+
+			p {
+				font-size:3rem; 
+				font-weight:300; 
+				color:$text-second;
+			}
+
+			a {
+				width:338px; height:50px;
+				margin:37px auto 0; 
+				line-height:50px; 
+				box-shadow:0 1px 3px 0 rgba(0,0,0,.3);
+				i {
+					display:inline-block;
+					width:13px; height:13px; 
+					vertical-align:middle; 
+					margin-right:10px; 
+					background:url('/app/img/icon/icon-plus-white.svg') center no-repeat;
+					background-size:cover;
+				}
+			}
+
+		}
+
+	}
+
+ 
+
+	&--peoples {
+	
+		height:80px;
+		width:100%; 
+		padding:0 100px 0 387px;
+		background:#fff;
+		border-bottom:1px solid #F7F7F7;
+	
+		ul {
+			width:100%; height:100%;
+			border-left:1px solid #F7F7F7;
+		}
+	}
+
+
+	&--people {
+
+		display:block; 
+		position:relative; 
+		width:33%; height:100%; 
+		border-right:1px solid #F7F7F7;
+		float:left;
+		padding:19px;
+
+		h4 {
+			font-size:1.8rem; 
+			font-weight:700; 
+			color:$text-third;
+		}
+
+		p {
+			font-size:1.6rem; 
+			color:$text-third;
+			margin-top:7px; 
+		}
+
+		&--option {
+			position:absolute; 
+			right:17px;top:12px;
+			cursor: pointer;
+			&>div {
+
+				position:relative; 
+				&>i {
+					display:block;
+					width:13px; height:17px; 
+					background:url('/app/img/icon/icon-arrow-bottom.svg') center no-repeat;
+					background-size:100% auto;
+				}
+
+				&:hover ul {
+					display:block; 
+				}
+			}
+			
+			ul {
+				display:none; 
+				position:absolute; 
+				width: 235px;
+				top: 16px; right: -26px;
+				border-radius:4px;
+				overflow:hidden; 
+				background:	#fff;
+				border:1px solid #DADADA;
+				box-shadow:0 2px 4px 0 rgba(0,0,0,.02);
+				li {
+					height:45px;
+					line-height:45px; 
+					border-bottom:1px solid #DADADA;
+					font-size:1.4rem; 
+					a {
+						color:$text-fouth;
+						padding:0 15px;
+						&.btn-download i {
+							display:inline-block; 
+							vertical-align:middle; 
+							width:16px; height:16px;
+							margin-right:13px;  
+							background:url('/app/img/icon/icon-download.svg') center no-repeat;
+							background-size:cover;
+						}
+						&.btn-archive i {
+							display:inline-block; 
+							vertical-align:middle; 
+							width:20px; height:15px; 
+							margin-right:13px;  
+							background:url('/app/img/icon/icon-archive.svg') center no-repeat;
+							background-size:cover;
+						}
+					}
+				}
+			}
+		}
+
+	}
+
+
+
+	&--docs_new {
+
+		width:100%; 
+		height:70px; 
+		padding:0 100px;
+		line-height:70px; 
+		background:#fff;
+		border-bottom:1px solid #F7F7F7;
+
+		form {
+
+			input {
+				display:inline-block; 
+				padding-left:25px;
+				background:url('/app/img/icon/icon-plus.svg') left center no-repeat;
+				background-size:15px;
+				border:none;
+			}
+
+			input[type="submit"] {
+				display:none; 
+			}
+		}
+
+	}
+
+}
+
+
+
+
+
+
+
+
+/**
+ *	Popup creation
+ */
+
+
+.popup_bucket_creation, .popup_bucket_creation_people {
+
+	.popup--wrap {
+		width:510px; 
+		margin-left:-255px;
+		button {
+			float:right; 
+			width:auto;
+		}	
+		.btn-simple {
+			margin-top:20px; 
+		}
+	}
+}
+

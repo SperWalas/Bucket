@@ -46,6 +46,9 @@ form {
 			border:1px solid #DADADA;
 			-webkit-appearance:none;
 			outline:none;
+			&:checked {
+				background:$blue-primary;
+			}
 		} 
 
 	}

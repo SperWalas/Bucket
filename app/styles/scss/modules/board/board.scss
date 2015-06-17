@@ -6,11 +6,11 @@
  *  @desc : All style about board
  *
  */
-
+ 
 
 .page_board {
 	
-	background:#EBEEF3;
+	background:#EBEEF3; 
 	min-height:calc(100vh - 80px - 50px);
 
 
@@ -22,19 +22,19 @@
 		height:80px;
 		padding:0 100px;
 		background:#fff;
-		box-shadow: 0 3px 0 0 #DCDFE5;
+		border-bottom: 3px solid #DCDFE5;
 
 		&--intro {
 			float:left;
 		}
-
+ 
 		h1 {
 			margin:17px 0 6px; 
 			font-size:2.4rem; 
 			font-weight:300; 
 			color:$text-primary;
 		}
-
+ 
 		&--notification {
 			color:$text-second;
 			font-size:1.4rem;
@@ -43,11 +43,12 @@
 				margin-right:26px;
 			}
 		}
-
+ 
 		nav {
 			float:right;
 			a {
-				margin-top:17px; 
+				float:left; 
+				margin:17px 0 0 50px; 
 				display:block; 
 				font-size:1.4rem; 
 				font-weight:500; 
@@ -62,9 +63,9 @@
 			}
 		}
 	}
-
-
-
+ 
+ 
+ 
 
 	&--main {
 
@@ -143,7 +144,7 @@
 		font-size:1.4rem; 
 		border-radius:4px 4px 0 0; 
 	}
-	
+	 
 
 
 	&--option {
@@ -202,8 +203,8 @@
 				}
 			}
 		}
-	}
-
+	} 
+ 
 
 
 	&--title {
@@ -236,7 +237,7 @@
 				width:15px; height:15px;
 				vertical-align:middle; 
 				margin-right:5px; 
-				background:url('/app/img/icon/icon-card-completion.svg') center no-repeat;
+				background:url('/app/img/icon/icon-card-completion.svg') center left no-repeat;
 				background-size:cover;
 			}
 
