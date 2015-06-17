@@ -59,8 +59,7 @@ define([
 
 			self.session = new Session();
 
-			$(self.elPage).html(mainTemplate);
-
+			self.render();
 		},
 
 
@@ -73,6 +72,9 @@ define([
 		render: function() {
 
 			var self = this;
+
+			$(self.elPage).html(mainTemplate);
+
 			return self;
 
 		},
