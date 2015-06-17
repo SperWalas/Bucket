@@ -33,7 +33,10 @@ define([
         parse: function(response) {
             var contributors = [];
             var accomplished = 0;
-            var percent = 0; 
+            var percent = 0;
+            var data;
+            var exist;
+            var index;
 
             _.forEach(response.tasks, function(task) {
 
@@ -43,19 +46,19 @@ define([
 
                 _.forEach(task.contributors, function(contributor) {
 
-                    var exist = _.find(contributors, function(value) {
+                    exist = _.find(contributors, function(value) {
                         return value.email === contributor.email;
                     });
 
                     if (exist === undefined) {
-                        var data = {};
-                        data.name = contributor.name;
+                        data = {};
+                        data.name = contributor.name || 'User';
                         data.email = contributor.email;
                         data.tasks = [];
                         data.tasks.push(task.id);
                         contributors.push(data);
                     } else {
-                        var index = contributors.indexOf(exist);
+                        index = contributors.indexOf(exist);
                         exist.tasks.push(task.id);
                         contributors[index] = exist;
                     }
