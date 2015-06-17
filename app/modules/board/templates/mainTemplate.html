@@ -21,9 +21,13 @@
 
 	<div class="page_board--main">
 
+	<% if (_.size(buckets) > 0) { %>
+
 		<div class="page_board--list">
 			
 			<ul>
+
+			<% _.each(buckets, function(bucket) { %>
 
 				<li class="card_bucket is-complete is-contains">
 					<div>
@@ -36,11 +40,11 @@
 								<i></i>
 								<ul>
 									<li><a href="" class="btn-download"><i></i>Télécharger les documents</a></li>
-									<li><a href="" class="btn-archive"><i></i>Archier le bucket</a></li>
+									<li><a href="" class="btn-archive"><i></i>Archiver le bucket</a></li>
 								</ul>
 							</div>
 						</div>
-						<h2 class="card_bucket--title"><a href="">Documents location New-York</a></h2>
+						<h2 class="card_bucket--title"><a href=""><%= bucket.name %></a></h2>
 						<div class="card_bucket--info">
 							<span class="bucket_completion"><i></i>100% complétés</span>
 							<span class="bucket_user"><i></i>Samuel, Laure, Antoine, Audrey, Hugo</span>
@@ -49,63 +53,20 @@
 					</div>
 				</li>
 
-				<li class="card_bucket is-update is-contains">
-					<div>
-
-						<div class="card_bucket--notification">
-							<span>5 fichiers à vérifier</span>
-						</div>
-						<div class="card_bucket--option">
-							<div>
-								<i></i>
-								<ul>
-									<li><a href="" class="btn-download"><i></i>Télécharger les documents</a></li>
-									<li><a href="" class="btn-archive"><i></i>Archier le bucket</a></li>
-								</ul>
-							</div>
-						</div>
-						<h2 class="card_bucket--title"><a href="">Documents location New-York</a></h2>
-						<div class="card_bucket--info">
-							<span class="bucket_completion"><i></i>100% complétés</span>
-							<span class="bucket_user"><i></i>Samuel, Laure, Antoine, Audrey, Hugo</span>
-						</div>
-					
-					</div>
-				</li>
-
-				<li class="card_bucket">
-					<div>
-
-						<div class="card_bucket--option">
-							<div>
-								<i></i>
-								<ul>
-									<li><a href="" class="btn-download"><i></i>Télécharger les documents</a></li>
-									<li><a href="" class="btn-archive"><i></i>Archier le bucket</a></li>
-								</ul>
-							</div>
-						</div>
-						<h2 class="card_bucket--title"><a href="">Documents location New-York</a></h2>
-						<div class="card_bucket--info">
-							<span class="bucket_completion"><i></i>100% complétés</span>
-							<span class="bucket_user"><i></i>Samuel, Laure, Antoine, Audrey, Hugo</span>
-						</div>
-
-					</div>
-				</li>
+			<% }); %>
 
 			</ul>
 
 		</div>
 
-		<!-- No result
+	<% } else { %> 
 		
 		<div class="no-result">
 			<p>Vous n’avez aucun bucket pour le moment.</p>
 			<a href="" class="btn-cta btn-new-bucket"><i></i>Créer un bucket</a>
 		</div>
 
-		-->
+	<% } %>
 
 	</div>
 	
