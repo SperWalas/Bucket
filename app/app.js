@@ -32,8 +32,17 @@ define([
 			// This works because the options object gets sent as the jQuery ajax options, which
 			// includes the `url` property
 
-			options.url = app.settings.api + (_.isFunction(model.url) ? model.url() : model.url) + '?token=' + Cookies.get('token');
-			 
+			if (model.url === '/session') {
+				options.url = app.settings.api + model.url;
+			} else {
+				options.url = app.settings.api + (_.isFunction(model.url) ? model.url() : model.url) + '?token=' + Cookies.get('token');
+			}
+
+			options.crossDomain = true;
+    		options.xhrFields = {
+    			withCredentials: true
+    		};
+
 			// Call the stored original Backbone.sync method with the new url property
 			// return BackboneSync(method, model, options);
 			return backboneSync.apply(this, [method, model, options]);

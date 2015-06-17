@@ -59,8 +59,7 @@ define([
 
 			self.session = new Session();
 
-			$(self.elPage).html(mainTemplate);
-
+			self.render();
 		},
 
 
@@ -73,6 +72,9 @@ define([
 		render: function() {
 
 			var self = this;
+
+			$(self.elPage).html(mainTemplate);
+
 			return self;
 
 		},
@@ -119,6 +121,7 @@ define([
 
 			if (status) {
 				self.hidePopup();
+				self.$el.trigger('login');
 				self.goToPage('/board');
 			} else {
 				// Handle error
@@ -152,8 +155,9 @@ define([
 			if (response.status) {
 				// Handle error
 			} else {
-				self.session.save(response);
+				self.session.saveToken(response);
 				self.hidePopup();
+				self.$el.trigger('login');
 				self.goToPage('/board');
 			}
 		}

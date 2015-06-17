@@ -647,6 +647,7 @@ form button[type="submit"] {
   min-height: 228px;
   float: left;
   padding-top: 23px;
+  border-right: 1px solid #F7F7F7;
 }
 .page_bucket--doc--title h3 {
   font-size: 1.8rem;
@@ -722,7 +723,7 @@ form button[type="submit"] {
   float: left;
   width: 33%;
   min-height: 228px;
-  border-left: 1px solid #F7F7F7;
+  border-right: 1px solid #F7F7F7;
 }
 .page_bucket--docs_new {
   width: 100%;
@@ -740,6 +741,31 @@ form button[type="submit"] {
   border: none;
 }
 .page_bucket--docs_new form input[type="submit"] {
+  display: none;
+}
+
+/**
+ *	Dropzone
+ */
+.dropzone {
+  width: 94%;
+  height: 94%;
+  margin: 4px auto;
+  border: 5px dashed #DADADA;
+  border-radius: 10px;
+  text-align: center;
+}
+.dropzone p {
+  font-size: 1.2rem;
+  color: #BBBBBB;
+}
+.dropzone p span {
+  font-size: 1.6rem;
+  font-weight: 500;
+  color: #BBBBBB;
+  margin-bottom: 4;
+}
+.dropzone input {
   display: none;
 }
 

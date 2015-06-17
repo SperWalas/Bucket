@@ -18,10 +18,11 @@ define([
   'collections/buckets/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
-  'text!modules/board/templates/createNameTemplate.html',
-  'text!modules/board/templates/createPeopleTemplate.html'
+  'text!modules/bucket/templates/createPeopleTemplate.html',
 
-], function($, _, Backbone, BucketModel, mainTemplate, createNameTemplate, createPeopleTemplate) {
+  'jqueryTag'
+
+], function($, _, Backbone, BucketModel, mainTemplate, createPeopleTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -41,7 +42,10 @@ define([
 		 */
 		 
 		events: {
-			'submit .page_bucket--docs_new form' : 'addFileRow'
+			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
+			'submit .page_bucket--docs_new form' : 'addFileRow',
+
+			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup'
 		},
 
 
@@ -54,25 +58,16 @@ define([
 
 			var self = this;
 
-			// Get the bucket asked
-			self.theBucket = new BucketModel();
+			// Get the bucket
+			self.bucket = new BucketModel({
+				id: self.id
+			});
+			self.bucket.fetch();
 
-
-			// Set the bucket to test
-			var peopleInBucket = [
-				{ 
-					name: "Laure",
-					email: "laure@gmail.com"
-				},
-				{ 
-					name: "Sam",
-					email: "sam@gmail.com"
-				},
-			];
-
-			self.theBucket.set('peoples', peopleInBucket);
-
+			// Binding
+			self.listenTo(self.bucket, 'reset add change remove', this.render, this);
 		},
+
 
 
 
@@ -85,13 +80,66 @@ define([
 
 			var self = this;
 
-			// Template the page
-			var template = _.template(mainTemplate, self.theBucket.toJSON() );
+			var bucket = self.bucket.toJSON();
+			var template = _.template(mainTemplate, {bucket: bucket});
+
 			$(self.elPage).html(template);
 
 			return self;
 
 		},
+
+
+
+
+		/**
+		 *	Init popup to add people to bucket
+		 *	@param		e = Event
+		 */
+
+		initPopupAddPeople:function(e) {
+ 
+			e.preventDefault();
+			e.stopPropagation();
+
+			var self = this;
+
+			// Template popup add people
+			bucket = self.bucket.toJSON();
+			var popupTemplate = _.template(createPeopleTemplate, bucket);
+			self.$el.append(popupTemplate);
+
+			$('#bucket_people').tagsInput({
+			   'height': 'auto',
+			   'width': '100%',
+			   'interactive':true,
+			   'defaultText':'Emails des participants',
+			   'delimiter': [',',';',' '], 
+			   'removeWithBackspace' : true,
+			   'placeholderColor' : '#BBB'
+			});
+
+		},
+
+
+
+
+		/**
+		 *	Hide popup
+		 *	@param		e = Event
+		 */
+
+		hidePopup: function(e) {
+
+			var self = this;
+			if(e) {
+				e.preventDefault();
+				e.stopPropagation();		
+			}
+			$('.popup').remove();
+
+		},
+
 
 
 

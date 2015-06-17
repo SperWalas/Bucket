@@ -4,7 +4,7 @@
 	<header class="page_bucket--header">
 		
 		<div class="page_bucket--header--intro">
-			<h1>Documents location NYC</h1>
+			<h1><%= bucket.name %></h1>
 			<p class="page_bucket--header--notification">
 				<span class="board_number">50% complétés</span>
 				<span class="people_number">3 personnes</span>
@@ -28,26 +28,38 @@
 
 		<div class="page_bucket--peoples">
 			<ul>
-				
-				<% _.each(peoples, function(people) { %>
 
-					<li class="page_bucket--people">
-						<div>
-							<h4><%= people.name %></h4>
-							<p><%= people.email %></p>
-							<div class="page_bucket--people--option">
-								<div>
-									<i></i>
-									<ul>
-										<li><a href="" class="btn-download">Supprimer la personne</a></li>
-										<li><a href="" class="btn-archive"><i></i>Envoyer un rappel</a></li>
-									</ul>
+				<% if( bucket.tasks) { %>
+				
+					<% _.each(bucket.tasks[0].contributors, function(contributor) { %>
+
+						<li class="page_bucket--people">
+							<div>
+								<h4><%= contributor.name %></h4>
+								<p><%= contributor.email %></p>
+								<div class="page_bucket--people--option">
+									<div>
+										<i></i>
+										<ul>
+											<li><a href="" class="btn-download">Supprimer la personne</a></li>
+											<li><a href="" class="btn-archive"><i></i>Envoyer un rappel</a></li>
+										</ul>
+									</div>
 								</div>
 							</div>
+						</li>
+
+					<% }); %>
+
+				<% } else { %>
+					
+					<li class="page_bucket--people">
+						<div>
+							<h4>Aucune personne attribuée au bucket</h4>
 						</div>
 					</li>
 
-				<% }); %>
+				<% } %>
 
 			</ul>
 		</div>
@@ -57,7 +69,7 @@
 		<div class="page_bucket--docs">
 			<ul>
 				
-			<% _.each(tasks, function(task) { %>
+			<% _.each(bucket.tasks, function(task) { %>
 
 				<li class="page_bucket--doc">
 
@@ -75,10 +87,19 @@
 					</div>
 						
 					<ul class="page_bucket--doc--peoples">
-					<% _.each(peoples, function(people) { %>
+					<% _.each(task.contributors, function(people) { %>
 
 						<li class="page_bucket--doc--people">
-							<div><input type="file"></div>
+							<div class="dropzone">
+								<div>
+									<i></i>
+									<p>
+										<span>Glisser et déposer pour uploader,</span>
+										ou <a href="">sélectionner des fichiers</a>
+									</p>
+								</div>
+								<input type="file" accept="application/pdf" />
+							</div>
 						</li>
 
 					<% }); %>

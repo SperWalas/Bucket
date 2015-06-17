@@ -25,7 +25,7 @@ define([
             authors : {}
         },
         
-        url : '/bucket',
+        urlRoot: '/bucket',
 
         // On init model
         initialize : function() {},

@@ -53,7 +53,7 @@ define([
         },
 
         // Render view asked
-        render: function(module) {
+        render: function(module, id) {
 
             var self = this;
 
@@ -61,30 +61,26 @@ define([
             module = (!module) ? this.defaultView : module;
             module = module.toLowerCase();
 
-            // if (module !== this.defaultView) {
-            //     if (!self.session.authenticated()) {
-            //         module = this.defaultView;
-            //         this.navigate('/', true);
-            //     }
-            // }
+            self.session.load();
+
+            if (module !== this.defaultView) {
+                if (!self.session.authenticated()) {
+                    module = this.defaultView;
+                    this.navigate('/', true);
+                }
+            } else {
+                if (self.session.authenticated()) {
+                    module = 'board';
+                    this.navigate('/board', true);
+                }
+            }
 
             // Load view asked 
-            if(self[module+'View']) { 
+            if(self[module+'View']) {
 
-                // If module is not the loaded load the new module (3d or Carto here)
-                if(self.moduleLoaded != module) {
-
-                    self.currentView = new self[module+'View']();
-                    self.currentView.render();
-
-                } else {
-
-                    self.currentView.render();
-
-                }
-
-                // Save the module loaded
-                self.moduleLoaded = module;
+                self.currentView = new self[module+'View']({
+                    id: id
+                });
 
                 console.log("Module loaded : " + module );
 
@@ -92,7 +88,6 @@ define([
 
                 // Module doesn't exist
                 self.error();
-
 
             }
  

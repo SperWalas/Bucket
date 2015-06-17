@@ -42,7 +42,9 @@ define([
 		 */
 		 
 		events: {
-			"click .header--nav--login" : "sendPopupEvent"
+			"click .header--nav--login" : "sendPopupEvent",
+			'click .header--nav--logout' : 'logout',
+			'login' : 'render'
 		},
 
 
@@ -55,17 +57,12 @@ define([
 
 			var self = this;
 
-			var session = new Session();
+			self.session = new Session();
 
 			// Add header template
 			$(self.elHeader).html(mainTemplate);
 
-			if (session.authenticated()) {
-				$(self.elNav).html(menuLoggedTemplate);
-			} else {
-				$(self.elNav).html(menuTemplate);
-			}
-
+			self.render();
 		},
 
 
@@ -78,6 +75,15 @@ define([
 		render: function() {
 
 			var self = this;
+
+			self.session.load();
+
+			if (self.session.authenticated()) {
+				$(self.elNav).html(menuLoggedTemplate);
+			} else {
+				$(self.elNav).html(menuTemplate);
+			}
+
 			return self;
 
 		},
@@ -95,8 +101,28 @@ define([
 			e.preventDefault();
 			self.$el.trigger('connect');
 
-		}
+		},
 
+		logout: function(e) {
+
+			var self = this;
+
+			e.preventDefault();
+
+			self.session.logout(self.logoutCallback.bind(self));
+		},
+
+		logoutCallback: function(status) {
+
+			var self = this;
+
+			if (status) {
+				self.goToPage('/');
+				self.render();
+			} else {
+				// Handle error
+			}
+		}
 
 	});
 

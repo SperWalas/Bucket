@@ -1,4 +1,4 @@
-
+	
 
 /**
  *	board.js
@@ -15,7 +15,7 @@ define([
   'underscore',
   'backbone',
 
-  'collections/buckets/model',
+  'collections/buckets/collection',
 
   'text!modules/board/templates/mainTemplate.html',
   'text!modules/board/templates/createNameTemplate.html',
@@ -23,7 +23,7 @@ define([
 
   'jqueryTag'
 
-], function($, _, Backbone, BucketModel, mainTemplate, createNameTemplate, createPeopleTemplate) {
+], function($, _, Backbone, BucketCollection, mainTemplate, createNameTemplate, createPeopleTemplate) {
 
 
 	var BoardView = Backbone.View.extend({
@@ -61,11 +61,11 @@ define([
 			var self = this;
 
 			// Init new bucket model, in case
-			self.newBucket = new BucketModel();
+			self.buckets = new BucketCollection();
+			self.buckets.fetch();
 
-			// Template the page
-			$(self.elPage).html(mainTemplate);
-
+			// Binding
+			this.listenTo(self.buckets, 'reset add change remove', this.render, this);
 		},
 
 
@@ -78,6 +78,13 @@ define([
 		render: function() {
 
 			var self = this;
+
+			var buckets = self.buckets.toJSON();
+			var template = _.template(mainTemplate, {buckets: buckets});
+
+			$(self.elPage).html(template);
+			console.log(buckets);
+
 			return self;
 
 		},

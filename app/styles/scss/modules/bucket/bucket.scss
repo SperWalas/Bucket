@@ -236,6 +236,7 @@
 			width:287px; min-height:228px;
 			float:left; 
 			padding-top:23px;
+			border-right:1px solid #F7F7F7;
 			h3 {
 				font-size:1.8rem; 
 				color:$text-third;
@@ -310,7 +311,7 @@
 			li {
 				float:left;
 				width:33%; min-height:228px;
-				border-left:1px solid #F7F7F7;
+				border-right:1px solid #F7F7F7;
 
 			}
 
@@ -349,6 +350,35 @@
 }
 
 
+
+
+/**
+ *	Dropzone
+ */
+
+.dropzone {
+	width:94%; 
+	height:94%;
+	margin:4px auto;
+	border:5px dashed #DADADA;
+	border-radius:10px;
+	text-align:center; 
+
+
+	p {
+		span {
+			font-size:1.6rem; 
+			font-weight:500; 
+			color:$text-second;
+			margin-bottom:4;
+		}
+		font-size:1.2rem; 
+		color:$text-second;
+	}
+	input {
+		display:none; 
+	}
+}
 
 
 
