@@ -17,9 +17,11 @@ define([
 
   'text!modules/header/templates/mainTemplate.html',
   'text!modules/header/templates/menuTemplate.html',
-  'text!modules/header/templates/menuLoggedTemplate.html'
+  'text!modules/header/templates/menuLoggedTemplate.html',
 
-], function($, _, Backbone, mainTemplate, menuTemplate, menuLoggedTemplate) {
+  'collections/session/model'
+
+], function($, _, Backbone, mainTemplate, menuTemplate, menuLoggedTemplate, Session) {
 
 
 	var HeaderView = Backbone.View.extend({
@@ -53,14 +55,13 @@ define([
 
 			var self = this;
 
+			var session = new Session();
+
 			// Add header template
 			$(self.elHeader).html(mainTemplate);
 
-			// TODO : SESSION !!!!!!!!!!!!!!
-			checksession = false;
-
-			if(checksession) {
-				$(self.elNav).html(menuTemplate);
+			if (session.authenticated()) {
+				$(self.elNav).html(menuLoggedTemplate);
 			} else {
 				$(self.elNav).html(menuTemplate);
 			}
