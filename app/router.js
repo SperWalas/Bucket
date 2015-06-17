@@ -61,12 +61,19 @@ define([
             module = (!module) ? this.defaultView : module;
             module = module.toLowerCase();
 
-            // if (module !== this.defaultView) {
-            //     if (!self.session.authenticated()) {
-            //         module = this.defaultView;
-            //         this.navigate('/', true);
-            //     }
-            // }
+            self.session.load();
+
+            if (module !== this.defaultView) {
+                if (!self.session.authenticated()) {
+                    module = this.defaultView;
+                    this.navigate('/', true);
+                }
+            } else {
+                if (self.session.authenticated()) {
+                    module = 'board';
+                    this.navigate('/board', true);
+                }
+            }
 
             // Load view asked 
             if(self[module+'View']) { 
