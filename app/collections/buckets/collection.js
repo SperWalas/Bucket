@@ -24,6 +24,8 @@ define([
 
        	model: BucketModel, // Generally best practise to bring down a Model/Schema for your collection
 
+        url: '/bucket',
+
         // On init model
         initialize : function() {},
 
