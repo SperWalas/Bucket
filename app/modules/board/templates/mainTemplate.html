@@ -29,12 +29,15 @@
 
 			<% _.each(buckets, function(bucket) { %>
 
-				<li class="card_bucket is-complete is-contains">
+				<li class="card_bucket <%= bucket.percent === 100 ? 'is-complete' : '' %>">
 					<div>
-
+					<% if (bucket.percent === 100) { %>
 						<div class="card_bucket--notification">
+						<% if (bucket.percent === 100) { %>
 							<span>Bucket complet !</span>
+						<% } %>
 						</div>
+					<% } %>
 						<div class="card_bucket--option">
 							<div>
 								<i></i>
@@ -46,8 +49,12 @@
 						</div>
 						<h2 class="card_bucket--title"><a href="/bucket/<%= bucket.id %>"><%= bucket.name %></a></h2>
 						<div class="card_bucket--info">
-							<span class="bucket_completion"><i></i>100% complétés</span>
-							<span class="bucket_user"><i></i>Samuel, Laure, Antoine, Audrey, Hugo</span>
+							<span class="bucket_completion"><i></i><%= bucket.percent %>% complété</span>
+							<span class="bucket_user"><i></i>
+							<% _.forEach(bucket.contributors, function(contributor, index) { %>
+								<%= contributor.name + (index < bucket.contributors.length - 1 ? ',' : '') %>
+							<% }) %>
+							</span>
 						</div>
 
 					</div>
