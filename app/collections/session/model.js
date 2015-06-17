@@ -75,7 +75,7 @@ define([
         },
 
         deleteToken: function() {
-            Cookies.expire('token');
+            Cookies.expire('token').expire('email').expire('id');
         },
 
         load: function() {
