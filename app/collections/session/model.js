@@ -25,7 +25,7 @@ define([
             password: ''
         },
 
-        url: '/user/login',
+        url: '/session',
         
         initialize : function() {
             this.load();
@@ -36,6 +36,7 @@ define([
         },
 
         login: function(username, password, callback) {
+
             var self = this;
 
             self.set({
@@ -54,16 +55,31 @@ define([
             });
         },
 
+        logout: function(callback) {
+
+            var self = this;
+
+            self.destroy({
+                success: function() {
+                    self.deleteToken();
+                    callback(true);
+                },
+                error: function() {
+                    callback(false);
+                }
+            });
+        },
+
         saveToken: function(token) {
             Cookies.set('token', token);
         },
 
-        load: function() {
-            this.set('token', Cookies.get('token'));
+        deleteToken: function() {
+            Cookies.expire('token');
         },
 
-        destroy: function() {
-            Cookies.expire('token');
+        load: function() {
+            this.set('token', Cookies.get('token'));
         }
     });
 

@@ -119,6 +119,7 @@ define([
 
 			if (status) {
 				self.hidePopup();
+				self.$el.trigger('login');
 				self.goToPage('/board');
 			} else {
 				// Handle error
@@ -152,8 +153,9 @@ define([
 			if (response.status) {
 				// Handle error
 			} else {
-				self.session.save(response);
+				self.session.saveToken(response);
 				self.hidePopup();
+				self.$el.trigger('login');
 				self.goToPage('/board');
 			}
 		}
