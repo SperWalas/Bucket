@@ -124,11 +124,12 @@
 		background:#fff;
 		border-bottom:1px solid #F7F7F7;
 	
-		ul {
+		& > ul {
 			width:100%; height:100%;
 			border-left:1px solid #F7F7F7;
 		}
 	}
+
 
 
 	&--people {
@@ -153,11 +154,11 @@
 		}
 
 		&--option {
-			position:absolute; 
-			right:17px;top:12px;
+			position:absolute;   
+			right: 21px; top: 20px;
 			cursor: pointer;
-			&>div {
 
+			&>div {
 				position:relative; 
 				&>i {
 					display:block;
@@ -165,7 +166,99 @@
 					background:url('/app/img/icon/icon-arrow-bottom.svg') center no-repeat;
 					background-size:100% auto;
 				}
+				&:hover ul {
+					display:block; 
+				}
+			}
+			
+			ul {
+				display:none; 
+				position:absolute; 
+				width: 235px;
+				top: 16px; right: -26px;
+				border-radius:4px;
+				overflow:hidden; 
+				background:	#fff;
+				border:1px solid #DADADA;
+				box-shadow:0 2px 4px 0 rgba(0,0,0,.02);
+				li {
+					height:45px;
+					line-height:45px; 
+					border-bottom:1px solid #DADADA;
+					font-size:1.4rem; 
+					a {
+						color:$text-fouth;
+						padding:0 15px;
+						&.btn-download i {
+							display:inline-block; 
+							vertical-align:middle; 
+							width:16px; height:16px;
+							margin-right:13px;  
+							background:url('/app/img/icon/icon-download.svg') center no-repeat;
+							background-size:cover;
+						}
+						&.btn-archive i {
+							display:inline-block; 
+							vertical-align:middle; 
+							width:20px; height:15px; 
+							margin-right:13px;  
+							background:url('/app/img/icon/icon-archive.svg') center no-repeat;
+							background-size:cover;
+						}
+					}
+				}
+			}
+		}
+	}
 
+
+
+
+	&--docs {
+
+		background:#fff;
+		ul {
+			overflow:hidden; 
+		}
+	}
+
+
+
+	
+	&--doc {
+		width:100%; 
+		padding:0 100px;
+		border:1px solid #F7F7F7;
+		overflow:hidden; 
+
+		&--title {
+			position:relative; 
+			width:287px; min-height:228px;
+			float:left; 
+			padding-top:23px;
+			h3 {
+				font-size:1.8rem; 
+				color:$text-third;
+				font-weight:700; 
+			}
+		}
+		ul {
+			float:left; 
+		}
+
+		&--option {
+			position:absolute; 
+			right: 27px; top: 25px;
+			cursor: pointer;
+
+			&>div {
+				position:relative; 
+				&>i {
+					display:block;
+					width:13px; height:17px; 
+					background:url('/app/img/icon/icon-arrow-bottom.svg') center no-repeat;
+					background-size:100% auto;
+				}
 				&:hover ul {
 					display:block; 
 				}
@@ -210,7 +303,20 @@
 			}
 		}
 
+
+		&--peoples {
+			width:calc(100% - 287px);
+
+			li {
+				float:left;
+				width:33%; min-height:228px;
+				border-left:1px solid #F7F7F7;
+
+			}
+
+		}
 	}
+
 
 
 

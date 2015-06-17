@@ -546,7 +546,7 @@ form button[type="submit"] {
   background: #fff;
   border-bottom: 1px solid #F7F7F7;
 }
-.page_bucket--peoples ul {
+.page_bucket--peoples > ul {
   width: 100%;
   height: 100%;
   border-left: 1px solid #F7F7F7;
@@ -572,8 +572,8 @@ form button[type="submit"] {
 }
 .page_bucket--people--option {
   position: absolute;
-  right: 17px;
-  top: 12px;
+  right: 21px;
+  top: 20px;
   cursor: pointer;
 }
 .page_bucket--people--option > div {
@@ -628,6 +628,101 @@ form button[type="submit"] {
   margin-right: 13px;
   background: url("/app/img/icon/icon-archive.svg") center no-repeat;
   background-size: cover;
+}
+.page_bucket--docs {
+  background: #fff;
+}
+.page_bucket--docs ul {
+  overflow: hidden;
+}
+.page_bucket--doc {
+  width: 100%;
+  padding: 0 100px;
+  border: 1px solid #F7F7F7;
+  overflow: hidden;
+}
+.page_bucket--doc--title {
+  position: relative;
+  width: 287px;
+  min-height: 228px;
+  float: left;
+  padding-top: 23px;
+}
+.page_bucket--doc--title h3 {
+  font-size: 1.8rem;
+  color: #767676;
+  font-weight: 700;
+}
+.page_bucket--doc ul {
+  float: left;
+}
+.page_bucket--doc--option {
+  position: absolute;
+  right: 27px;
+  top: 25px;
+  cursor: pointer;
+}
+.page_bucket--doc--option > div {
+  position: relative;
+}
+.page_bucket--doc--option > div > i {
+  display: block;
+  width: 13px;
+  height: 17px;
+  background: url("/app/img/icon/icon-arrow-bottom.svg") center no-repeat;
+  background-size: 100% auto;
+}
+.page_bucket--doc--option > div:hover ul {
+  display: block;
+}
+.page_bucket--doc--option ul {
+  display: none;
+  position: absolute;
+  width: 235px;
+  top: 16px;
+  right: -26px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #DADADA;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+}
+.page_bucket--doc--option ul li {
+  height: 45px;
+  line-height: 45px;
+  border-bottom: 1px solid #DADADA;
+  font-size: 1.4rem;
+}
+.page_bucket--doc--option ul li a {
+  color: #4B4B4B;
+  padding: 0 15px;
+}
+.page_bucket--doc--option ul li a.btn-download i {
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  margin-right: 13px;
+  background: url("/app/img/icon/icon-download.svg") center no-repeat;
+  background-size: cover;
+}
+.page_bucket--doc--option ul li a.btn-archive i {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 15px;
+  margin-right: 13px;
+  background: url("/app/img/icon/icon-archive.svg") center no-repeat;
+  background-size: cover;
+}
+.page_bucket--doc--peoples {
+  width: calc(100% - 287px);
+}
+.page_bucket--doc--peoples li {
+  float: left;
+  width: 33%;
+  min-height: 228px;
+  border-left: 1px solid #F7F7F7;
 }
 .page_bucket--docs_new {
   width: 100%;

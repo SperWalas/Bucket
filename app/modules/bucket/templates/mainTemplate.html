@@ -28,45 +28,68 @@
 
 		<div class="page_bucket--peoples">
 			<ul>
+				
+				<% _.each(peoples, function(people) { %>
 
-				<li class="page_bucket--people">
-					<div>
-						<h4>Laure</h4>
-						<p>laure@gmail.com</p>
-						<div class="page_bucket--people--option">
-							<i></i>
-							<div>
-								<ul>
-									<li><a href="" class="btn-download"><i></i>Télécharger les documents</a></li>
-									<li><a href="" class="btn-archive"><i></i>Archier le bucket</a></li>
-								</ul>
+					<li class="page_bucket--people">
+						<div>
+							<h4><%= people.name %></h4>
+							<p><%= people.email %></p>
+							<div class="page_bucket--people--option">
+								<div>
+									<i></i>
+									<ul>
+										<li><a href="" class="btn-download">Supprimer la personne</a></li>
+										<li><a href="" class="btn-archive"><i></i>Envoyer un rappel</a></li>
+									</ul>
+								</div>
 							</div>
 						</div>
-					</div>
-				</li>
+					</li>
 
-				<li class="page_bucket--people">
-					<div>
-						<h4>Sam</h4>
-						<p>sam@gmail.com</h4>
-						<div class="page_bucket--people--option">
-							<i></i>
-							<div>
-								<ul>
-									<li><a href="" class="btn-download"><i></i>Télécharger les documents</a></li>
-									<li><a href="" class="btn-archive"><i></i>Archier le bucket</a></li>
-								</ul>
-							</div>
-						</div>
-					</div>
-				</li>
+				<% }); %>
 
 			</ul>
 		</div>
 
 
 		<!-- View all documents -->
-		<div class="page_bucket--docs"></div>
+		<div class="page_bucket--docs">
+			<ul>
+				
+			<% _.each(tasks, function(task) { %>
+
+				<li class="page_bucket--doc">
+
+					<div class="page_bucket--doc--title">
+						<h3><%= task.name %></h3>
+						<div class="page_bucket--doc--option">
+							<div>
+								<i></i>
+								<ul>
+									<li><a href="" class="btn-download">Supprimer cette demande</a></li>
+									<li><a href="" class="btn-archive">Envoyer un rappel</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+						
+					<ul class="page_bucket--doc--peoples">
+					<% _.each(peoples, function(people) { %>
+
+						<li class="page_bucket--doc--people">
+							<div><input type="file"></div>
+						</li>
+
+					<% }); %>
+					</ul>
+
+				</li>
+
+			<% }); %>
+	
+			</ul>
+		</div>
 
 
 		<!-- Add new documents -->
@@ -74,7 +97,7 @@
 			<form action="">
 				<div>
 					<label for="">
-						<input type="text" id="new_docs" placeholder="Demander un document">
+						<input type="text" id="new_doc" placeholder="Demander un document">
 					</label>
 				</div>
 				<input type="submit">
