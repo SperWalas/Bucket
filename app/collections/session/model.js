@@ -23,7 +23,7 @@ define([
             token: null
         },
 
-        url: 'http://localhost:1337/user/login',
+        url: 'https://damp-ridge-1156.herokuapp.com/user/login',
         
         initialize : function() {
             this.load();
@@ -33,7 +33,7 @@ define([
             return Boolean(this.get('token'));
         },
 
-        login: function(username, password) {
+        login: function(username, password, callback) {
             var self = this;
 
             $.ajax({
@@ -42,9 +42,10 @@ define([
                 data: { email: username, password: password },
                 success: function(data) {
                     self.save(data);
+                    callback(true);
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    self.save(false);
+                error: function() {
+                    callback(false);
                 }
             });
         },
