@@ -6,8 +6,8 @@
 		<div class="page_board--header--intro">
 			<h1>Mes buckets</h1>
 			<p class="page_board--header--notification">
-				<span class="board_number">Aucun bucket</span>
-				<span class="review_number">Aucun fichier à examiner</span>
+				<span class="board_number"><%= _.size(buckets) > 1 ? _.size(buckets) + ' buckets' : _.size(buckets) === 1 ? _.size(buckets) + ' bucket' : 'Aucun bucket' %></span>
+				<span class="review_number"><%= files > 1 ? files + ' fichiers' : files === 1 ? files + ' fichier' : 'Aucun fichier' %> à examiner</span>
 			</p>
 			<span>
 		</div>
@@ -29,7 +29,7 @@
 
 			<% _.each(buckets, function(bucket) { %>
 
-				<li class="card_bucket <%= bucket.percent === 100 ? 'is-complete' : '' %>">
+				<li class="card_bucket <%= bucket.percent === 100 ? 'is-complete' : '' %> <%= bucket.files > 0 ? 'is-contains' : '' %>">
 					<div>
 					<% if (bucket.percent === 100) { %>
 						<div class="card_bucket--notification">
@@ -43,7 +43,7 @@
 								<i></i>
 								<ul>
 									<li><a href="" class="btn-download"><i></i>Télécharger les documents</a></li>
-									<li><a href="" class="btn-archive"><i></i>Archiver le bucket</a></li>
+									<li><a href="" class="btn-archive" data-id="<%= bucket.id %>"><i></i>Archiver le bucket</a></li>
 								</ul>
 							</div>
 						</div>
@@ -51,9 +51,13 @@
 						<div class="card_bucket--info">
 							<span class="bucket_completion"><i></i><%= bucket.percent %>% complété</span>
 							<span class="bucket_user"><i></i>
-							<% _.forEach(bucket.contributors, function(contributor, index) { %>
-								<%= contributor.name + (index < bucket.contributors.length - 1 ? ',' : '') %>
-							<% }) %>
+							<% if (bucket.contributors.length) { %>
+								<% _.forEach(bucket.contributors, function(contributor, index) { %>
+									<%= contributor.name + (index < bucket.contributors.length - 1 ? ',' : '') %>
+								<% }) %>
+							<% } else { %>
+								Aucune personne
+							<% } %>
 							</span>
 						</div>
 

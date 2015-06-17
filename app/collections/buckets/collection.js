@@ -19,7 +19,7 @@ define([
 
 ], function($, _, Backbone, BucketModel){
 
-    var BucketCollection = Backbone.Model.extend({
+    var BucketCollection = Backbone.Collection.extend({
 
 
        	model: BucketModel, // Generally best practise to bring down a Model/Schema for your collection
@@ -32,7 +32,8 @@ define([
         parse: function(response) {
             var contributors;
             var accomplished;
-            var percent; 
+            var percent;
+            var files;
             var data;
             var exist;
             var index;
@@ -41,12 +42,15 @@ define([
                 contributors = [];
                 accomplished = 0;
                 percent = 0;
+                files = 0;
 
                 _.forEach(bucket.tasks, function(task){
                     
                     if (task.accomplish) {
                         accomplished++;
                     }
+
+                    files += _.size(task.files);
 
                     _.forEach(task.contributors, function(contributor) {
 
@@ -69,13 +73,18 @@ define([
                     });
                 });
 
-                percent = (accomplished / bucket.tasks.length) * 100;
+                if( bucket.tasks.length) {
+                    percent = (accomplished / bucket.tasks.length) * 100;
+                } else {
+                    percent = 0;
+                }
 
                 index = response.indexOf(bucket);
 
                 bucket.contributors = contributors;
                 bucket.percent = percent;
                 bucket.accomplished = accomplished;
+                bucket.files = files;
 
                 response[index] = bucket;
             });
