@@ -20,10 +20,12 @@ define([
     var SessionModel = Backbone.Model.extend({
 
         defaults: {
-            token: null
+            token: false,
+            email: '',
+            password: ''
         },
 
-        url: 'https://damp-ridge-1156.herokuapp.com/user/login',
+        url: '/user/login',
         
         initialize : function() {
             this.load();
@@ -36,12 +38,14 @@ define([
         login: function(username, password, callback) {
             var self = this;
 
-            $.ajax({
-                method: 'POST',
-                url: self.url,
-                data: { email: username, password: password },
-                success: function(data) {
-                    self.save(data);
+            self.set({
+                email: username,
+                password: password
+            });
+
+            self.save(null, {
+                success: function(model, response, options) {
+                    self.saveToken(response);
                     callback(true);
                 },
                 error: function() {
@@ -50,12 +54,16 @@ define([
             });
         },
 
-        save: function(token) {
+        saveToken: function(token) {
             Cookies.set('token', token);
         },
 
         load: function() {
             this.set('token', Cookies.get('token'));
+        },
+
+        destroy: function() {
+            Cookies.expire('token');
         }
     });
 
