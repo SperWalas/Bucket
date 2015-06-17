@@ -52,12 +52,13 @@ define([
 
 			var self = this;
 
-			// Init new bucket model, in case
-			// self.newBucket = new BucketModel();
+			self.bucket = new BucketModel({
+				id: self.id
+			});
+			self.bucket.fetch();
 
-			// Template the page
-			$(self.elPage).html(mainTemplate);
-
+			// Binding
+			this.listenTo(self.bucket, 'reset add change remove', this.render, this);
 		},
 
 
@@ -70,6 +71,13 @@ define([
 		render: function() {
 
 			var self = this;
+
+			var bucket = self.bucket.toJSON();
+			var template = _.template(mainTemplate, {bucket: bucket});
+
+			$(self.elPage).html(template);
+			console.log(bucket);
+
 			return self;
 
 		},
