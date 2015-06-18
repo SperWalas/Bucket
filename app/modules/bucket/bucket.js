@@ -16,6 +16,7 @@ define([
   'backbone',
 
   'collections/buckets/model',
+  'collections/tasks/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
@@ -23,7 +24,7 @@ define([
 
   'jqueryTag'
 
-], function($, _, Backbone, BucketModel, mainTemplate, createPeopleTemplate, fileUploadTemplate) {
+], function($, _, Backbone, BucketModel, TaskModel, mainTemplate, createPeopleTemplate, fileUploadTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -46,7 +47,7 @@ define([
 		 
 		events: {
 			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
-			'submit .page_bucket--docs_new form' : 'addFileRow',
+			'submit .page_bucket--docs_new form' : 'addTask',
 
 			'submit .popup_bucket_creation_people form' : 'addPeople',
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
@@ -171,7 +172,6 @@ define([
 			var $this = $(e.currentTarget);
 			var email = $this.data('email');
 			var users = self.theBucket.get('users');
-			console.log(_.prototype);
 			var index = _.findIndex(users, {
 				email: email
 			});
@@ -180,11 +180,32 @@ define([
 				users.splice(index, 1);
 			}
 
-			console.log(users);
+			self.theBucket.set('users', users);
+			self.theBucket.save();
 		},
 
+		addTask: function(e) {
+			var self = this;
 
+			e.preventDefault();
 
+			var $this = $(e.currentTarget);
+			var $name = $this.find('input');
+			var task = new TaskModel({
+				name: $name.val(),
+				users: self.theBucket.get('users'),
+				bucket: {
+					id: self.theBucket.get('id')
+				}
+			});
+			$name.val('');
+			task.save(null, {success: function(model, response, options) {
+				var tasks = self.theBucket.get('tasks');
+				tasks.push(response);
+				self.theBucket.set('tasks', tasks);
+				self.theBucket.save();
+			}});
+		},
 
 		/**
 		 *	Hide popup
@@ -201,38 +222,6 @@ define([
 			$('.popup').remove();
 
 		},
-
-
-
-
-		/**
-		 *	Add a file row in the bucket
-		 * 	@param		e = Event
-		 */
-
-		addFileRow:function(e) {
-
-			e.preventDefault();
-
-			var self = this;
-			var $from = $('.page_bucket--docs_new form');
-
-			// Add task in bucket
-			var tasks = self.theBucket.get('tasks');
-			if(!tasks.length) 
-				tasks = [];
-			tasks.push({ name: $from.find('#new_doc').val() });
-			self.theBucket.set('tasks', tasks);
-
-			// Remove entry in 
-			$from.find('#new_doc').val(''); 
-
-			self.render();
-
-		},
-
-
-
 
 		/**
 		 *	Dropzone
