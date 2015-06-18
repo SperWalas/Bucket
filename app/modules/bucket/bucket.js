@@ -21,10 +21,12 @@ define([
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
   'text!modules/bucket/templates/fileUploadTemplate.html',
+  'text!modules/bucket/templates/viewerPDFTemplate.html',
 
-  'jqueryTag'
+  'jqueryTag',
+  'pdfViewer',
 
-], function($, _, Backbone, BucketModel, TaskModel, mainTemplate, createPeopleTemplate, fileUploadTemplate) {
+], function($, _, Backbone, BucketModel, TaskModel, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -55,6 +57,9 @@ define([
 
 			'click .page_bucket--doc .btn-download' : 'removeTask',
 
+			'click .slot--file--info' : 'openPDF',
+			'click .popup_background' : 'hidePopup',
+
 			'dragenter .dropzone' : 'highlightDropZone',
 		    'dragleave .dropzone' : 'unhighlightDropZone',
 		    'change input[type="file"]' : 'dropFile',
@@ -75,6 +80,9 @@ define([
 				id: self.id
 			});
 			self.theBucket.fetch();
+
+			console.log(self.theBucket);
+
 
 			// Binding
 			self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
@@ -303,6 +311,108 @@ define([
 
 
 		 },
+
+
+
+		 /**
+		  *	Gestion du PDF
+		  */
+
+		openPDF:function(e) {
+
+		  	e.stopPropagation();
+		  	e.preventDefault();
+
+		  	var self = this; 
+
+		  	self.$el.append(viewerPDFTemplate);
+
+		  	var pdfUrl = $(e.currentTarget).data("url");
+		  	pdfUrl = 'https://s3.amazonaws.com/buckethostinghetic2/4c1f9aca-54d9-49a5-9b75-66f0abb2cd8e.pdf';
+
+
+
+		  	function handlePages(page) { 
+
+
+			    var container = document.querySelector('.popup_viewer--pdfs');
+
+			    //This gives us the page's dimensions at full scale
+			    var viewport = page.getViewport( $('.popup_viewer--pdfs').width() / page.getViewport(1.0).width );
+
+			    //We'll create a canvas for each page to draw it on
+			    var canvas = document.createElement( "canvas" );
+			    canvas.style.display = "block";
+			    var context = canvas.getContext('2d');
+			    canvas.height = viewport.height;
+			    canvas.width = viewport.width;
+
+			    //Draw it on the canvas
+			    page.render({canvasContext: context, viewport: viewport});
+
+			    //Add it to the web page
+			    container.appendChild( canvas );
+
+			    //Move to next page
+			    currPage++;
+			    if ( thePDF !== null && currPage <= numPages )
+			    {
+			        thePDF.getPage( currPage ).then( handlePages );
+			    }
+
+			}
+
+
+		  	if (PDFJS.PDFViewer || PDFJS.getDocument) {
+
+		  		PDFJS.workerSrc = '../vendors/pdfjs-dist/build/pdf.worker.js';
+
+
+		  		var currPage = 1; //Pages are 1-based not 0-based
+				var numPages = 0;
+				var thePDF = null;
+
+				//This is where you start
+				PDFJS.getDocument(pdfUrl).then(function(pdf) {
+
+			        //Set PDFJS global object (so we can easily access in our page functions
+			        thePDF = pdf;
+
+			        //How many pages it has
+			        numPages = pdf.numPages;
+
+			        //Start with first page
+			        pdf.getPage( 1 ).then( handlePages );
+
+				});
+
+
+
+				// var PAGE_TO_VIEW = 1;
+
+				// var container = document.querySelector('.popup_viewer--pdfs');
+
+				// // Loading document.
+				// PDFJS.getDocument(pdfUrl).then(function (pdfDocument) {
+				//   // Document loaded, retrieving the page.
+				//   return pdfDocument.getPage(PAGE_TO_VIEW).then(function (pdfPage) {
+				//   	var ratio = 840 / pdfPage.pageInfo.view[2];
+				//   	console.log(ratio);
+				//     // Creating the page view with default parameters.
+				//     var pdfPageView = new PDFJS.PDFPageView({
+				//       container: container,
+				//       id: PAGE_TO_VIEW,
+				//       scale: 1,
+				//       defaultViewport: pdfPage.getViewport(ratio)
+				//     });
+				//     // Associates the actual page with the view, and drawing it
+				//     pdfPageView.setPdfPage(pdfPage);
+				//     return pdfPageView.draw();
+				//   });
+				// });
+			}
+
+		},
 
 
 

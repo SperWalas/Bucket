@@ -9,7 +9,11 @@ require.config({
     "jquery": "../vendors/jquery/dist/jquery",
     "backbone": "../vendors/backbone/backbone",
     "jqueryTag": "../vendors/jquery.tagsinput/src/jquery.tagsinput",
-    'cookies': '../vendors/cookies-js/dist/cookies.min'
+    'cookies': '../vendors/cookies-js/dist/cookies.min',
+    'pdfJs': '../vendors/pdfjs-dist/build/pdf',
+    'pdfViewerCompatibility': '../vendors/pdfjs-dist/web/compatibility',
+    'pdfViewer': '../vendors/pdfjs-dist/web/pdf_viewer',
+
   },
 
 
@@ -26,6 +30,10 @@ require.config({
     },
     'gsap' : {
     	exports: 'TweenMax'
+    },
+    'pdfViewer' : {
+        deps : ['pdfViewerCompatibility', 'pdfJs'],
+        exports: 'PDFJS'
     }
   },
 

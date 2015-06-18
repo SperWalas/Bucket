@@ -64,7 +64,7 @@ define([
                         data.tasks = [];
                         taskToAdd = {
                             id : task.id,
-                            file : _.filter(task.files, function(file) { file.size = self.fileSizeSI(self.size); return ( file.users === contributor.id && file.tasks === task.id ); })
+                            file : _.filter(task.files, function(file) { file.sizeFormated = self.fileSizeSI(file.size); return ( file.users === contributor.id && file.tasks === task.id ); })
                         };
                         data.tasks.push(taskToAdd);
                         contributors.push(data);
@@ -73,7 +73,7 @@ define([
                         console.log(index);
                         taskToAdd = {
                             id : task.id,
-                            file : _.filter(task.files, function(file) { file.size = self.fileSizeSI(self.size); return ( file.users === contributor.id && file.tasks === task.id ); })
+                            file : _.filter(task.files, function(file) { file.sizeFormated = self.fileSizeSI(file.size); return ( file.users === contributor.id && file.tasks === task.id ); })
                         };
                         exist.tasks.push(taskToAdd);
                         contributors[index] = exist;

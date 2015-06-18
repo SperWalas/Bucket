@@ -64,7 +64,14 @@ define([
 			self.session.load();
 
 			self.buckets = new BucketCollection();
-			self.buckets.fetch();
+			self.buckets.fetch({
+				success: function(model, response){
+				    self.render();
+				},
+				error: function(){
+				    console.log('error');
+				}
+			});
 
 			// Binding
 			self.listenTo(self.buckets, 'add', self.saveBucket, self);
@@ -82,7 +89,6 @@ define([
 		render: function() {
 
 			var self = this;
-
 			var buckets = self.buckets.toJSON();
 			var template = _.template(mainTemplate);
 			template = template({buckets: buckets, files: self.getFilesNumber(buckets)});
