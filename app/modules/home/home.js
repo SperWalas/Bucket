@@ -12,7 +12,7 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
 
   'text!modules/home/templates/mainTemplate.html',
@@ -155,7 +155,7 @@ define([
 			if (response.status) {
 				// Handle error
 			} else {
-				self.session.saveToken(response);
+				self.session.saveCredentials(response);
 				self.hidePopup();
 				self.$el.trigger('login');
 				self.goToPage('/board');

@@ -12,10 +12,11 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
 
   'collections/buckets/model',
+  'collections/tasks/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
@@ -23,7 +24,7 @@ define([
 
   'jqueryTag'
 
-], function($, _, Backbone, BucketModel, mainTemplate, createPeopleTemplate, fileUploadTemplate) {
+], function($, _, Backbone, BucketModel, TaskModel, mainTemplate, createPeopleTemplate, fileUploadTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -36,6 +37,8 @@ define([
 		el:'#main',
 		elPage: '.page',
 
+		people: [],
+
 
  
 		/**
@@ -44,9 +47,11 @@ define([
 		 
 		events: {
 			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
-			'submit .page_bucket--docs_new form' : 'addFileRow',
+			'submit .page_bucket--docs_new form' : 'addTask',
 
+			'submit .popup_bucket_creation_people form' : 'addPeople',
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
+			'click .page_bucket--people .btn-download' : 'removePeople',
 
 			'dragenter .dropzone' : 'highlightDropZone',
 		    'dragleave .dropzone' : 'unhighlightDropZone',
@@ -70,7 +75,7 @@ define([
 			self.theBucket.fetch();
 
 			// Binding
-			self.listenTo(self.theBucket, 'reset add change remove', this.render, this);
+			self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
 		},
 
 
@@ -86,8 +91,8 @@ define([
 			var self = this;
 
 			var bucket = self.theBucket.toJSON();
-			console.log(bucket);
-			var template = _.template(mainTemplate, {bucket: bucket});
+			var template = _.template(mainTemplate);
+			template = template({bucket: bucket});
 
 			$(self.elPage).html(template);
 
@@ -112,23 +117,95 @@ define([
 
 			// Template popup add people
 			bucket = self.theBucket.toJSON();
-			var popupTemplate = _.template(createPeopleTemplate, bucket);
+			var popupTemplate = _.template(createPeopleTemplate);
+			popupTemplate = popupTemplate(bucket);
 			self.$el.append(popupTemplate);
 
 			$('#bucket_people').tagsInput({
-			   'height': 'auto',
-			   'width': '100%',
-			   'interactive':true,
-			   'defaultText':'Emails des participants',
-			   'delimiter': [',',';',' '], 
-			   'removeWithBackspace' : true,
-			   'placeholderColor' : '#BBB'
+				height: 'auto',
+				width: '100%',
+				interactive:true,
+				defaultText:'Emails des participants',
+				delimiter: [',',';',' '], 
+				removeWithBackspace: true,
+				placeholderColor: '#BBB',
+				onAddTag: self.onAddPeople.bind(self),
+				onRemoveTag: self.onRemovePeople.bind(self)
 			});
 
 		},
 
+		onAddPeople: function(email) {
+			var self = this;
+			self.people.push({email: email});
+		},
 
+		onRemovePeople: function(email) {
+			var self = this;
 
+			var i = array.indexOf({email: email});
+
+			if (i != -1) {
+				self.people.splice(i, 1);
+			}
+		},	
+
+		addPeople: function(e) {
+			var self = this;
+
+			e.preventDefault();
+
+			var users = self.theBucket.get('users');
+			users = users.concat(self.people);
+
+			self.theBucket.set('users', users);
+			self.theBucket.save();
+			self.hidePopup();
+		},
+
+		removePeople: function(e) {
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $this = $(e.currentTarget);
+			var email = $this.data('email');
+			var users = self.theBucket.get('users');
+			var index = _.findIndex(users, {
+				email: email
+			});
+
+			if (index != -1) {
+				users.splice(index, 1);
+			}
+
+			self.theBucket.set('users', users);
+			self.theBucket.save();
+		},
+
+		addTask: function(e) {
+			var self = this;
+
+			e.preventDefault();
+
+			var $this = $(e.currentTarget);
+			var $name = $this.find('input');
+			var task = new TaskModel({
+				name: $name.val(),
+				users: self.theBucket.get('users'),
+				bucket: {
+					id: self.theBucket.get('id')
+				}
+			});
+			$name.val('');
+			task.save(null, {success: function(model, response, options) {
+				var tasks = self.theBucket.get('tasks');
+				tasks.push(response);
+				self.theBucket.set('tasks', tasks);
+				self.theBucket.save();
+			}});
+		},
 
 		/**
 		 *	Hide popup
@@ -145,38 +222,6 @@ define([
 			$('.popup').remove();
 
 		},
-
-
-
-
-		/**
-		 *	Add a file row in the bucket
-		 * 	@param		e = Event
-		 */
-
-		addFileRow:function(e) {
-
-			e.preventDefault();
-
-			var self = this;
-			var $from = $('.page_bucket--docs_new form');
-
-			// Add task in bucket
-			var tasks = self.theBucket.get('tasks');
-			if(!tasks.length) 
-				tasks = [];
-			tasks.push({ name: $from.find('#new_doc').val() });
-			self.theBucket.set('tasks', tasks);
-
-			// Remove entry in 
-			$from.find('#new_doc').val(''); 
-
-			self.render();
-
-		},
-
-
-
 
 		/**
 		 *	Dropzone
@@ -230,7 +275,8 @@ define([
 
 		 		file.sizeFormated = self.fileSizeSI(file.size);
 
-			 	var templateFile = _.template(fileUploadTemplate, file);
+			 	var templateFile = _.template(fileUploadTemplate);
+			 	templateFile = templateFile(file);
 			 	$slot.prepend(templateFile);
 
 		 	});

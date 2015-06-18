@@ -12,7 +12,7 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
 
   'collections/buckets/collection',
@@ -84,7 +84,10 @@ define([
 			var self = this;
 
 			var buckets = self.buckets.toJSON();
-			var template = _.template(mainTemplate, {buckets: buckets, files: self.getFilesNumber(buckets)});
+			console.log(buckets);
+			console.log(self.getFilesNumber(buckets));
+			var template = _.template(mainTemplate);
+			template = template({buckets: buckets, files: self.getFilesNumber(buckets)});
 
 			$(self.elPage).html(template);
 			console.log(buckets);
@@ -112,7 +115,6 @@ define([
 
 			e.preventDefault();
 
-			var bucket = new BucketModel();
 			var $form = $(e.currentTarget);
 			var name = $form.find('input[name="name"]').val();
 
