@@ -20,9 +20,7 @@ define([
     var SessionModel = Backbone.Model.extend({
 
         defaults: {
-            token: false,
-            email: '',
-            password: ''
+            token: false
         },
 
         url: '/session',
@@ -61,7 +59,7 @@ define([
 
             self.destroy({
                 success: function() {
-                    self.deleteToken();
+                    self.deleteCredentials();
                     callback(true);
                 },
                 error: function() {
@@ -71,17 +69,20 @@ define([
         },
 
         saveCredentials: function(response) {
-            Cookies.set('token', response.token).set('email', response.email).set('id', response.id);
+            Cookies.set('token', response.token).set('email', response.email).set('id', response.id).set('name', response.name);
         },
 
-        deleteToken: function() {
-            Cookies.expire('token').expire('email').expire('id');
+        deleteCredentials: function() {
+            Cookies.expire('token').expire('email').expire('id').expire('name');
         },
 
         load: function() {
-            this.set('token', Cookies.get('token'));
-            this.set('email', Cookies.get('email'));
-            this.set('id', Cookies.get('id'));
+            this.set({
+                token: Cookies.get('token'),
+                email: Cookies.get('email'),
+                id: Cookies.get('id'),
+                name: Cookies.get('name')
+            });
         }
     });
 
