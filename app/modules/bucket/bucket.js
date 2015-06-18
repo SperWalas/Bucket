@@ -36,6 +36,8 @@ define([
 		el:'#main',
 		elPage: '.page',
 
+		people: [],
+
 
  
 		/**
@@ -45,6 +47,7 @@ define([
 		events: {
 			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
 			'submit .page_bucket--docs_new form' : 'addFileRow',
+			'submit .popup_bucket_creation_people form' : 'addPeople',
 
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
 
@@ -70,7 +73,7 @@ define([
 			self.theBucket.fetch();
 
 			// Binding
-			self.listenTo(self.theBucket, 'reset add change remove', this.render, this);
+			self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
 		},
 
 
@@ -115,15 +118,45 @@ define([
 			self.$el.append(popupTemplate);
 
 			$('#bucket_people').tagsInput({
-			   'height': 'auto',
-			   'width': '100%',
-			   'interactive':true,
-			   'defaultText':'Emails des participants',
-			   'delimiter': [',',';',' '], 
-			   'removeWithBackspace' : true,
-			   'placeholderColor' : '#BBB'
+				height: 'auto',
+				width: '100%',
+				interactive:true,
+				defaultText:'Emails des participants',
+				delimiter: [',',';',' '], 
+				removeWithBackspace: true,
+				placeholderColor: '#BBB',
+				onAddTag: self.onAddPeople.bind(self),
+				onRemoveTag: self.onRemovePeople.bind(self)
 			});
 
+		},
+
+		onAddPeople: function(email) {
+			var self = this;
+			self.people.push({email: email});
+		},
+
+		onRemovePeople: function(email) {
+			var self = this;
+
+			var i = array.indexOf({email: email});
+
+			if (i != -1) {
+				self.people.splice(i, 1);
+			}
+		},	
+
+		addPeople: function(e) {
+			var self = this;
+
+			e.preventDefault();
+
+			var users = self.theBucket.get('users');
+			users = users.concat(self.people);
+
+			self.theBucket.set('users', users);
+			self.theBucket.save();
+			self.hidePopup();
 		},
 
 
