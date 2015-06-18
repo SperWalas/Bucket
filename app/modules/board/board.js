@@ -67,7 +67,9 @@ define([
 			self.buckets.fetch();
 
 			// Binding
-			this.listenTo(self.buckets, 'reset add change remove', this.render, this);
+			self.listenTo(self.buckets, 'add', self.saveBucket, self);
+			self.listenTo(self.buckets, 'remove', self.destroyBucket, self);
+			self.listenTo(self.buckets, 'add change remove', self.render, self);
 		},
 
 
@@ -114,42 +116,10 @@ define([
 			var $form = $(e.currentTarget);
 			var name = $form.find('input[name="name"]').val();
 
-			bucket.set('name', name);
-			bucket.set('authors', [
-				self.session.get('id')
-			]);
-			bucket.save();
-		},
-
-		/**
-		 *	Show second popup of creation
-		 */
-		startAddPeopleBucket: function(e) {
-
-			e.preventDefault();
-			e.stopPropagation();
-
-			var self = this;
-
-			// Set name in new bucket
-			self.newBucket.set("name", $('#bucket_name').val() );
-
-			var jSON = self.newBucket.toJSON();
-			var popupTemplate = _.template(createPeopleTemplate, jSON );
-
-			self.hidePopup();
-			self.$el.append(popupTemplate);
-
-			$('#bucket_people').tagsInput({
-			   'height': 'auto',
-			   'width': '100%',
-			   'interactive':true,
-			   'defaultText':'Emails des participants',
-			   'delimiter': [',',';',' '], 
-			   'removeWithBackspace' : true,
-			   'placeholderColor' : '#BBB'
-			}).importTags(jSON.emailTag);
-
+			self.buckets.add({
+				name: name,
+				authors: [self.session.get('id')]
+			});
 		},
 
 		archiveBucket: function(e) {
@@ -160,8 +130,16 @@ define([
 
 			var $this = $(e.currentTarget);
 
-			var bucket = self.buckets.findWhere({ id: $this.data('id') });
+			self.buckets.remove($this.data('id'));
+		},
 
+		saveBucket: function(bucket) {
+			var self = this;
+			self.hidePopup();
+			bucket.save();
+		},
+
+		destroyBucket: function(bucket) {
 			bucket.destroy();
 		},
 
