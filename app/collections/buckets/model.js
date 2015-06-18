@@ -48,7 +48,11 @@ define([
                     accomplished++;
                 }
 
-                files += _.size(task.files);
+                _forEach(tasks.files, function(file){
+                    if (!file.accepted) {
+                        files++;
+                    }
+                });
 
                 _.forEach(task.contributors, function(contributor) {
 
@@ -70,7 +74,6 @@ define([
                         contributors.push(data);
                     } else {
                         index = contributors.indexOf(exist);
-                        console.log(index);
                         taskToAdd = {
                             id : task.id,
                             file : _.filter(task.files, function(file) { file.sizeFormated = self.fileSizeSI(file.size); return ( file.users === contributor.id && file.tasks === task.id ); })
