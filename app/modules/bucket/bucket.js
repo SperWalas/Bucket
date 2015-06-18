@@ -181,24 +181,39 @@ define([
 		 *	Dropzone
 		 */
 
-		 highlightDropZone:function(e) {
+		highlightDropZone:function(e) {
 		 	e.preventDefault();
 
 		 	var $dropZone = $(e.currentTarget);
 		 	$dropZone.addClass('is-hovered');
-		 },
+		},
 
 
-		 unhighlightDropZone:function(e) {
+		unhighlightDropZone:function(e) {
 		 	e.preventDefault();
 
 		 	var $dropZone = $(e.currentTarget);
 		 	$dropZone.removeClass('is-hovered');
-		 },
+		},
 
 
-		 dropFile:function(e) {
+		/** 
+		 *	Convert size to readable size 
+		 * TODO : REMOVE THIS TO HELPER
+		 */
 
+		fileSizeSI:function(a,b,c,d,e){
+			 return (b=Math,c=b.log,d=1e3,e=c(a)/c(d)|0,a/b.pow(d,e)).toFixed(2)+' '+(e?'kMGTPEZY'[--e]+'B':'Bytes');
+		},
+
+
+		/**
+		 *	Event when files are drop in dropzone
+		 */
+
+		dropFile:function(e) {
+
+			var self = this;
 		 	var $input = $(e.currentTarget);
 		 	var $slot = $input.parent().parent();
 		 	var $dropZone = $slot.find('.dropzone');
@@ -212,48 +227,13 @@ define([
 
 		 	_.each(fileDropped, function(file) {
 
+		 		file.sizeFormated = self.fileSizeSI(file.size);
+
 			 	var templateFile = _.template(fileUploadTemplate, file);
 			 	$slot.prepend(templateFile);
 
 		 	});
 
-
-
-
-		 	//$('#dropzone').addClass('dropped');
-
-
-		 	/*
-
-		 	$('#dropzone input').on('change', function(e) {
-    var file = this.files[0];
-
-    $('#dropzone').removeClass('hover');
-    
-    if (this.accept && $.inArray(file.type, this.accept.split(/, ?/)) == -1) {
-      return alert('File type not allowed.');
-    }
-    
-    $('#dropzone').addClass('dropped');
-    $('#dropzone img').remove();
-    
-    if ((/^image\/(gif|png|jpeg)$/i).test(file.type)) {
-      var reader = new FileReader(file);
-
-      reader.readAsDataURL(file);
-      
-      reader.onload = function(e) {
-        var data = e.target.result,
-            $img = $('<img />').attr('src', data).fadeIn();
-        
-        $('#dropzone div').html($img);
-      };
-    } else {
-      var ext = file.name.split('.').pop();
-      
-      $('#dropzone div').html(ext);
-    }
-  }); */
 
 		 },
 

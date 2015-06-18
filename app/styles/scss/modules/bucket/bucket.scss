@@ -314,6 +314,16 @@
 				width:360px; min-height:228px;
 				border-right:1px solid #F7F7F7;
 
+				&.is-contain-file {
+					.dropzone {
+						height:77px;
+						line-height:67px; 
+						i {
+							display:none; 
+						}
+					}
+				}
+
 			}
 
 		}
@@ -362,7 +372,7 @@
 	width:340px; 
 	height:208px;
 	line-height:208px; 
-	margin:10px auto 0;
+	margin:10px;
 	border:3px dashed #DADADA;
 	border-radius:4px;
 	text-align:center; 
@@ -415,6 +425,56 @@
 }
 
 
+
+/**
+ *	File
+ */
+
+.slot--file {
+	display:block; 
+	width:340px; height:auto;
+	padding:10px;
+	margin:10px;
+	border:1px solid #DADADA;
+	border-radius:4px;
+	box-shadow:0 1px 0 0 #EEEEEE;
+	overflow:hidden; 
+	& > i {
+		display:block; 
+		float:left;
+		width:34px; height:40px; 
+		margin-right:7px; 
+		background:url('/app/img/icon/icon-pdf.svg') center no-repeat;
+		background-size:cover;
+	}
+
+	&--info {
+		width:244px;
+		overflow:hidden;
+		float: left;
+		margin-right: 10px; 
+		h3 {
+			font-size:1.6rem; 
+			color:$text-third;
+			margin:4px 0 3px; 
+		}
+		p {
+			font-size:1.4rem; 
+			color:$text-second;
+		}
+	}
+
+	&--delete {
+		display:block; 
+		width:14px; height:14px; 
+		float: left;
+		margin-top: 12px;
+		text-indent:-9999px; 
+		background:url('/app/img/icon/icon-cross.svg') center no-repeat;
+		background-size:cover;
+	}
+	
+}
 
 
 
