@@ -83,7 +83,8 @@ define([
 				if(!userInfo.name) {
 					userInfo.name = userInfo.email;
 				}
-				var template = _.template(menuLoggedTemplate, {name : userInfo.name});
+				var template = _.template(menuLoggedTemplate);
+				template = template({name : userInfo.name});
 				$(self.elNav).html(template);
 			} else {
 				$(self.elNav).html(menuTemplate);
