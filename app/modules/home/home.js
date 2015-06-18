@@ -155,7 +155,7 @@ define([
 			if (response.status) {
 				// Handle error
 			} else {
-				self.session.saveToken(response);
+				self.session.saveCredentials(response);
 				self.hidePopup();
 				self.$el.trigger('login');
 				self.goToPage('/board');
