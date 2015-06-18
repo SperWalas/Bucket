@@ -18,6 +18,7 @@ define([
   'collections/buckets/model',
   'collections/tasks/model',
   'collections/session/model',
+  'collections/files/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
@@ -28,7 +29,7 @@ define([
   'pdfViewer',
 
 
-], function($, _, Backbone, BucketModel, TaskModel, Session, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
+], function($, _, Backbone, BucketModel, TaskModel, Session, FileModel, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -51,12 +52,12 @@ define([
 		 
 		events: {
 			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
-			'submit .page_bucket--docs_new form' : 'addTask',
 
 			'submit .popup_bucket_creation_people form' : 'addPeople',
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
 			'click .page_bucket--people .btn-download' : 'removePeople',
 
+			'submit .page_bucket--docs_new form' : 'addTask',
 			'click .page_bucket--doc .btn-download' : 'removeTask',
 
 			'click .slot--file--info' : 'openPDF',
@@ -64,7 +65,9 @@ define([
 
 			'dragenter .dropzone' : 'highlightDropZone',
 			'dragleave .dropzone' : 'unhighlightDropZone',
+
 			'change input[type="file"]' : 'onDrop',
+			'click .slot--file--delete' : 'removeFile'
 		},
 
 
@@ -84,9 +87,6 @@ define([
 				id: self.id
 			});
 			self.theBucket.fetch();
-
-			console.log(self.theBucket);
-
 
 			// Binding
 			self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
@@ -261,9 +261,9 @@ define([
 
 				file.sizeFormated = self.fileSizeSI(file.size);
 
-			 	var templateFile = _.template(fileUploadTemplate);
-			 	templateFile = templateFile(file);
-			 	$slot.prepend(templateFile);
+				var templateFile = _.template(fileUploadTemplate);
+				templateFile = templateFile(file);
+				$slot.prepend(templateFile);
 			});
 
 			self.addFile(e);
@@ -285,20 +285,51 @@ define([
 				data.append('files', file);
 			});
 
-			$.ajax({
-				url: 'https://damp-ridge-1156.herokuapp.com/file?token=' + token + '&contributor=' + contributor + '&task=' + task + '&erase=' + erase,
+
+			// With file model
+			var file = new FileModel();
+
+			file.url = file.url + '?contributor=' + contributor + '&task=' + task + '&erase=' + erase;
+			file.save(null, {
 				data: data,
 				contentType: false,
-        		processData: false,
-				crossDomain: true,
-    			xhrFields: {
-    				withCredentials: true
-    			},
-				type: 'POST',
-				success: function(data) {
-					// Handle success event
-				}
+				processData: false
 			});
+
+			// // With standalone js
+			// $.ajax({
+			// 	url: 'https://damp-ridge-1156.herokuapp.com/file?token=' + token + '&contributor=' + contributor + '&task=' + task + '&erase=' + erase,
+			// 	data: data,
+			// 	contentType: false,
+			// 	processData: false,
+			// 	crossDomain: true,
+			// 	xhrFields: {
+			// 		withCredentials: true
+			// 	},
+			// 	type: 'POST',
+			// 	success: function(data) {
+			// 		// Handle success event
+			// 	}
+			// });
+		},
+
+		removeFile: function(e) {
+
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $this = $(e.currentTarget);
+			var id = $this.data('id');
+			var file = new FileModel({
+				id: id
+			});
+
+			file.url = file.url + '/' + id;
+			file.destroy({success: function(){
+				self.theBucket.fetch();
+			}});
 		},
 
 		/**
@@ -353,26 +384,26 @@ define([
 		dropFile:function(e) {
 
 			var self = this;
-		 	var $input = $(e.currentTarget);
-		 	var $slot = $input.parent().parent();
-		 	var $dropZone = $slot.find('.dropzone');
+			var $input = $(e.currentTarget);
+			var $slot = $input.parent().parent();
+			var $dropZone = $slot.find('.dropzone');
 
-		 	// Add class, prepare style
-		 	$dropZone.removeClass('is-hovered');
-		 	$slot.addClass('is-contain-file');
+			// Add class, prepare style
+			$dropZone.removeClass('is-hovered');
+			$slot.addClass('is-contain-file');
 
-		 	// Get file
-		 	var fileDropped = e.currentTarget.files;
+			// Get file
+			var fileDropped = e.currentTarget.files;
 
-		 	_.each(fileDropped, function(file) {
+			_.each(fileDropped, function(file) {
 
-		 		file.sizeFormated = self.fileSizeSI(file.size);
+				file.sizeFormated = self.fileSizeSI(file.size);
 
-			 	var templateFile = _.template(fileUploadTemplate);
-			 	templateFile = templateFile(file);
-			 	$slot.prepend(templateFile);
+				var templateFile = _.template(fileUploadTemplate);
+				templateFile = templateFile(file);
+				$slot.prepend(templateFile);
 
-		 	});
+			});
 
 
 		 },
@@ -385,69 +416,69 @@ define([
 
 		openPDF:function(e) {
 
-		  	e.stopPropagation();
-		  	e.preventDefault();
+			e.stopPropagation();
+			e.preventDefault();
 
-		  	var self = this; 
+			var self = this; 
 
-		  	self.$el.append(viewerPDFTemplate);
+			self.$el.append(viewerPDFTemplate);
 
-		  	var pdfUrl = $(e.currentTarget).data("url");
-		  	pdfUrl = 'https://s3.amazonaws.com/buckethostinghetic2/4c1f9aca-54d9-49a5-9b75-66f0abb2cd8e.pdf';
-
-
-
-		  	function handlePages(page) { 
+			var pdfUrl = $(e.currentTarget).data("url");
+			pdfUrl = 'https://s3.amazonaws.com/buckethostinghetic2/4c1f9aca-54d9-49a5-9b75-66f0abb2cd8e.pdf';
 
 
-			    var container = document.querySelector('.popup_viewer--pdfs');
 
-			    //This gives us the page's dimensions at full scale
-			    var viewport = page.getViewport( $('.popup_viewer--pdfs').width() / page.getViewport(1.0).width );
+			function handlePages(page) { 
 
-			    //We'll create a canvas for each page to draw it on
-			    var canvas = document.createElement( "canvas" );
-			    canvas.style.display = "block";
-			    var context = canvas.getContext('2d');
-			    canvas.height = viewport.height;
-			    canvas.width = viewport.width;
 
-			    //Draw it on the canvas
-			    page.render({canvasContext: context, viewport: viewport});
+				var container = document.querySelector('.popup_viewer--pdfs');
 
-			    //Add it to the web page
-			    container.appendChild( canvas );
+				//This gives us the page's dimensions at full scale
+				var viewport = page.getViewport( $('.popup_viewer--pdfs').width() / page.getViewport(1.0).width );
 
-			    //Move to next page
-			    currPage++;
-			    if ( thePDF !== null && currPage <= numPages )
-			    {
-			        thePDF.getPage( currPage ).then( handlePages );
-			    }
+				//We'll create a canvas for each page to draw it on
+				var canvas = document.createElement( "canvas" );
+				canvas.style.display = "block";
+				var context = canvas.getContext('2d');
+				canvas.height = viewport.height;
+				canvas.width = viewport.width;
+
+				//Draw it on the canvas
+				page.render({canvasContext: context, viewport: viewport});
+
+				//Add it to the web page
+				container.appendChild( canvas );
+
+				//Move to next page
+				currPage++;
+				if ( thePDF !== null && currPage <= numPages )
+				{
+					thePDF.getPage( currPage ).then( handlePages );
+				}
 
 			}
 
 
-		  	if (PDFJS.PDFViewer || PDFJS.getDocument) {
+			if (PDFJS.PDFViewer || PDFJS.getDocument) {
 
-		  		PDFJS.workerSrc = '../vendors/pdfjs-dist/build/pdf.worker.js';
+				PDFJS.workerSrc = '../vendors/pdfjs-dist/build/pdf.worker.js';
 
 
-		  		var currPage = 1; //Pages are 1-based not 0-based
+				var currPage = 1; //Pages are 1-based not 0-based
 				var numPages = 0;
 				var thePDF = null;
 
 				//This is where you start
 				PDFJS.getDocument(pdfUrl).then(function(pdf) {
 
-			        //Set PDFJS global object (so we can easily access in our page functions
-			        thePDF = pdf;
+					//Set PDFJS global object (so we can easily access in our page functions
+					thePDF = pdf;
 
-			        //How many pages it has
-			        numPages = pdf.numPages;
+					//How many pages it has
+					numPages = pdf.numPages;
 
-			        //Start with first page
-			        pdf.getPage( 1 ).then( handlePages );
+					//Start with first page
+					pdf.getPage( 1 ).then( handlePages );
 
 				});
 
