@@ -112,7 +112,6 @@ define([
 
 			e.preventDefault();
 
-			var bucket = new BucketModel();
 			var $form = $(e.currentTarget);
 			var name = $form.find('input[name="name"]').val();
 
