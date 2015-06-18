@@ -123,7 +123,7 @@
 										ou <a href="">sélectionner des fichiers</a>
 									</p>
 								</div>
-								<input type="file" accept="application/pdf" multiple/>
+								<input type="file" name="files[]" accept="application/pdf" multiple data-task="<%= task.id %>" data-contributor="<%= contributor.email %>"/>
 							</div>
 						</li>
 
