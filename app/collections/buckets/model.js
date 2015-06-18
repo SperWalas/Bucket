@@ -48,7 +48,7 @@ define([
                     accomplished++;
                 }
 
-                _.forEach(tasks.files, function(file){
+                _.forEach(task.files, function(file){
                     if (!file.accepted) {
                         files++;
                     }
