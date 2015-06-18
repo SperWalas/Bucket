@@ -79,7 +79,8 @@ define([
 			self.session.load();
 
 			if (self.session.authenticated()) {
-				$(self.elNav).html(menuLoggedTemplate);
+				var template = _.template(menuLoggedTemplate, {name : self.session.toJSON().email});
+				$(self.elNav).html(template);
 			} else {
 				$(self.elNav).html(menuTemplate);
 			}

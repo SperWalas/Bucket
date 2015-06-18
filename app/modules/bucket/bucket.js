@@ -19,10 +19,11 @@ define([
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
+  'text!modules/bucket/templates/fileUploadTemplate.html',
 
   'jqueryTag'
 
-], function($, _, Backbone, BucketModel, mainTemplate, createPeopleTemplate) {
+], function($, _, Backbone, BucketModel, mainTemplate, createPeopleTemplate, fileUploadTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -49,7 +50,7 @@ define([
 
 			'dragenter .dropzone' : 'highlightDropZone',
 		    'dragleave .dropzone' : 'unhighlightDropZone',
-		    'drop .dropzone' : 'dropFile',
+		    'change input[type="file"]' : 'dropFile',
 		},
 
 
@@ -109,7 +110,7 @@ define([
 			var self = this;
 
 			// Template popup add people
-			bucket = self.bucket.toJSON();
+			bucket = self.theBucket.toJSON();
 			var popupTemplate = _.template(createPeopleTemplate, bucket);
 			self.$el.append(popupTemplate);
 
@@ -193,6 +194,67 @@ define([
 
 		 	var $dropZone = $(e.currentTarget);
 		 	$dropZone.removeClass('is-hovered');
+		 },
+
+
+		 dropFile:function(e) {
+
+		 	var $input = $(e.currentTarget);
+		 	var $slot = $input.parent().parent();
+		 	var $dropZone = $slot.find('.dropzone');
+
+		 	// Add class, prepare style
+		 	$dropZone.removeClass('is-hovered');
+		 	$slot.addClass('is-contain-file');
+
+		 	// Get file
+		 	var fileDropped = e.currentTarget.files;
+
+		 	_.each(fileDropped, function(file) {
+
+			 	var templateFile = _.template(fileUploadTemplate, file);
+			 	$slot.prepend(templateFile);
+
+		 	});
+
+
+
+
+		 	//$('#dropzone').addClass('dropped');
+
+
+		 	/*
+
+		 	$('#dropzone input').on('change', function(e) {
+    var file = this.files[0];
+
+    $('#dropzone').removeClass('hover');
+    
+    if (this.accept && $.inArray(file.type, this.accept.split(/, ?/)) == -1) {
+      return alert('File type not allowed.');
+    }
+    
+    $('#dropzone').addClass('dropped');
+    $('#dropzone img').remove();
+    
+    if ((/^image\/(gif|png|jpeg)$/i).test(file.type)) {
+      var reader = new FileReader(file);
+
+      reader.readAsDataURL(file);
+      
+      reader.onload = function(e) {
+        var data = e.target.result,
+            $img = $('<img />').attr('src', data).fadeIn();
+        
+        $('#dropzone div').html($img);
+      };
+    } else {
+      var ext = file.name.split('.').pop();
+      
+      $('#dropzone div').html(ext);
+    }
+  }); */
+
 		 },
 
 

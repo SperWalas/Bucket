@@ -230,9 +230,92 @@ form button[type="submit"] {
 .header--logo {
   display: inline-block;
   vertical-align: middle;
+  height: 79px;
+  line-height: 80px;
 }
 .header--nav {
   float: right;
+  height: 79px;
+  line-height: 80px;
+}
+.header--nav--my_account {
+  position: relative;
+}
+.header--nav--my_account > i {
+  display: inline-block;
+  width: 20px;
+  height: 22px;
+  vertical-align: middle;
+  margin-right: 10px;
+  background: url("/app/img/icon/icon-ring.svg") center no-repeat;
+  background-size: cover;
+}
+.header--nav--my_account h3 {
+  display: inline-block;
+  margin-right: 25px;
+  font-size: 1.6rem;
+  color: #767676;
+  font-weight: 500;
+}
+.header--nav--my_account--option {
+  position: absolute;
+  right: 0;
+  top: 34px;
+  cursor: pointer;
+  z-index: 100;
+}
+.header--nav--my_account--option > div {
+  position: relative;
+}
+.header--nav--my_account--option > div > i {
+  display: block;
+  width: 13px;
+  height: 17px;
+  background: url("/app/img/icon/icon-arrow-bottom.svg") center no-repeat;
+  background-size: 100% auto;
+}
+.header--nav--my_account--option > div:hover ul {
+  display: block;
+}
+.header--nav--my_account--option ul {
+  display: none;
+  position: absolute;
+  width: 235px;
+  top: 16px;
+  right: -26px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  border: 1px solid #DADADA;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+}
+.header--nav--my_account--option ul li {
+  height: 45px;
+  line-height: 45px;
+  border-bottom: 1px solid #DADADA;
+  font-size: 1.4rem;
+}
+.header--nav--my_account--option ul li a {
+  color: #4B4B4B;
+  padding: 0 15px;
+}
+.header--nav--my_account--option ul li a.btn-download i {
+  display: inline-block;
+  vertical-align: middle;
+  width: 16px;
+  height: 16px;
+  margin-right: 13px;
+  background: url("/app/img/icon/icon-download.svg") center no-repeat;
+  background-size: cover;
+}
+.header--nav--my_account--option ul li a.btn-archive i {
+  display: inline-block;
+  vertical-align: middle;
+  width: 20px;
+  height: 15px;
+  margin-right: 13px;
+  background: url("/app/img/icon/icon-archive.svg") center no-repeat;
+  background-size: cover;
 }
 
 /**
@@ -349,9 +432,7 @@ form button[type="submit"] {
  *	Header
  */
 .header {
-  line-height: 80px;
   border-bottom: 1px solid #DCDFE5;
-  overflow: hidden;
 }
 .header--logo {
   font-size: 3rem;
@@ -679,6 +760,7 @@ form button[type="submit"] {
 .page_bucket--doc--option ul {
   display: none;
   position: absolute;
+  z-index: 100;
   width: 235px;
   top: 16px;
   right: -26px;
