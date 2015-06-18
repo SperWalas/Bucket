@@ -293,7 +293,10 @@ define([
 			file.save(null, {
 				data: data,
 				contentType: false,
-				processData: false
+				processData: false,
+				success: function() {
+					self.theBucket.fetch();
+				}
 			});
 
 			// // With standalone js
