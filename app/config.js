@@ -3,8 +3,8 @@ require.config({
 
   paths: {
     'text' : '../vendors/requirejs-text/text', // RequireJS plugin
-    "underscore": "../vendors/lodash/dist/lodash.underscore",
-    "lodash": "../vendors/lodash/dist/lodash",
+    "underscore": "../vendors/underscore/underscore",
+    "lodash": "../vendors/lodash/lodash",
     "template": "../vendors/lodash-template-loader/loader",
     "jquery": "../vendors/jquery/dist/jquery",
     "backbone": "../vendors/backbone/backbone",

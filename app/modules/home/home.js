@@ -12,7 +12,7 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
 
   'text!modules/home/templates/mainTemplate.html',
