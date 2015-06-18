@@ -681,6 +681,7 @@ form button[type="submit"] {
   background: #fff;
   border: 1px solid #DADADA;
   box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.02);
+  z-index: 1;
 }
 .page_bucket--people--option ul li {
   height: 45px;
@@ -731,6 +732,7 @@ form button[type="submit"] {
   border-right: 1px solid #F7F7F7;
 }
 .page_bucket--doc--title h3 {
+  width: 230px;
   font-size: 1.8rem;
   color: #767676;
   font-weight: 700;
@@ -882,6 +884,7 @@ form button[type="submit"] {
   top: 0;
   left: 0;
   cursor: pointer;
+  z-index: 1;
 }
 .dropzone.is-hovered {
   border: 3px solid #DADADA;

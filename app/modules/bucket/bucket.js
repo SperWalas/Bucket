@@ -86,6 +86,7 @@ define([
 			var self = this;
 
 			var bucket = self.theBucket.toJSON();
+			console.log(bucket);
 			var template = _.template(mainTemplate, {bucket: bucket});
 
 			$(self.elPage).html(template);

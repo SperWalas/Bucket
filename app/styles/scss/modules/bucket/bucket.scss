@@ -181,6 +181,7 @@
 				background:	#fff;
 				border:1px solid #DADADA;
 				box-shadow:0 2px 4px 0 rgba(0,0,0,.02);
+				z-index: 1;
 				li {
 					height:45px;
 					line-height:45px; 
@@ -238,6 +239,7 @@
 			padding-top:23px;
 			border-right:1px solid #F7F7F7;
 			h3 {
+				width: 230px;
 				font-size:1.8rem; 
 				color:$text-third;
 				font-weight:700; 
@@ -413,6 +415,7 @@
 		position:absolute; 
 		top:0; left:0;
 		cursor:pointer;
+		z-index: 1;
 	}
 
 	&.is-hovered {

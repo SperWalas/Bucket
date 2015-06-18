@@ -32,6 +32,7 @@ define([
 
         parse: function(response) {
 
+            var self = this;
             var contributors = [];
             var users = [];
             var accomplished = 0;
@@ -61,11 +62,19 @@ define([
                         users.push(data);
                         data.name = contributor.name || 'User';
                         data.tasks = [];
-                        data.tasks.push(task.id);
+                        taskToAdd = {
+                            id : task.id,
+                            file : _.filter(task.files, function(file) { file.sizeFormated = self.fileSizeSI(file.size); return ( file.users === contributor.id && file.tasks === task.id ); })
+                        };
+                        data.tasks.push(taskToAdd);
                         contributors.push(data);
                     } else {
                         index = contributors.indexOf(exist);
-                        exist.tasks.push(task.id);
+                        taskToAdd = {
+                            id : task.id,
+                            file : []
+                        };
+                        exist.tasks.push(taskToAdd);
                         contributors[index] = exist;
                     }
                 });
@@ -83,7 +92,16 @@ define([
             response.files = files;
 
             return response;
-        }
+        },
+
+
+        /**
+         *  Convert size to readable
+         */
+
+        fileSizeSI:function(a,b,c,d,e){
+             return (b=Math,c=b.log,d=1e3,e=c(a)/c(d)|0,a/b.pow(d,e)).toFixed(2)+' '+(e?'kMGTPEZY'[--e]+'B':'Bytes');
+        },
 
 
     });

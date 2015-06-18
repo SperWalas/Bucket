@@ -69,7 +69,7 @@
 		<div class="page_bucket--docs">
 			<ul>
 				
-			<% _.each(bucket.tasks, function(task) { %>
+			<% _.each(bucket.tasks, function(task, idx) { %>
 
 				<li class="page_bucket--doc">
 
@@ -87,9 +87,32 @@
 					</div>
 						
 					<ul class="page_bucket--doc--peoples">
-					<% _.each(task.contributors, function(people) { %>
+					<% _.each( bucket.contributors, function(contributor) { %>
+	
 
-						<li class="page_bucket--doc--people">
+						<% if( _.size(contributor.tasks[idx].file) > 0 ) { %>
+							<li class="page_bucket--doc--people is-contain-file">
+						<% } else { %>
+							<li class="page_bucket--doc--people">
+						<% } %>
+
+							<% if( _.size(contributor.tasks[idx].file) > 0 ) { %>
+								
+								<% _.each(contributor.tasks[idx].file, function(file) { %>
+
+									<div class="slot--file is-pdf">
+										<i></i>
+										<a href="" class="slot--file--info">
+											<h3 class="slot--file--title"><%= file.name %></h3>
+											<p class="slot--file--size"><%= file.sizeFormated %></p>
+										</a>
+										<a class="slot--file--delete" href="">Supprimer</a>
+									</div>
+
+								<% }) %>
+
+							<% } %>
+
 							<div class="dropzone">
 								<div>
 									<i>
