@@ -194,19 +194,20 @@ define([
 
 			var $this = $(e.currentTarget);
 			var $name = $this.find('input');
+			var users = self.theBucket.get('users');
+			if (!users.length) {
+				users = self.theBucket.get('authors');
+			}
 			var task = new TaskModel({
 				name: $name.val(),
-				users: self.theBucket.get('users'),
+				users: users,
 				bucket: {
 					id: self.theBucket.get('id')
 				}
 			});
 			$name.val('');
 			task.save(null, {success: function(model, response, options) {
-				var tasks = self.theBucket.get('tasks');
-				tasks.push(response);
-				self.theBucket.set('tasks', tasks);
-				self.theBucket.save();
+				self.theBucket.fetch();
 			}});
 		},
 
