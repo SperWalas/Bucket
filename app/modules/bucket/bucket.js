@@ -17,6 +17,7 @@ define([
 
   'collections/buckets/model',
   'collections/tasks/model',
+  'collections/session/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
@@ -26,7 +27,8 @@ define([
   'jqueryTag',
   'pdfViewer',
 
-], function($, _, Backbone, BucketModel, TaskModel, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
+
+], function($, _, Backbone, BucketModel, TaskModel, Session, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -61,8 +63,8 @@ define([
 			'click .popup_background' : 'hidePopup',
 
 			'dragenter .dropzone' : 'highlightDropZone',
-		    'dragleave .dropzone' : 'unhighlightDropZone',
-		    'change input[type="file"]' : 'dropFile',
+			'dragleave .dropzone' : 'unhighlightDropZone',
+			'change input[type="file"]' : 'onDrop',
 		},
 
 
@@ -74,6 +76,8 @@ define([
 		initialize: function() {
 
 			var self = this;
+
+			self.session = new Session();
 
 			// Get the bucket
 			self.theBucket = new BucketModel({
@@ -147,11 +151,14 @@ define([
 		},
 
 		onAddPeople: function(email) {
+
 			var self = this;
+
 			self.people.push({email: email});
 		},
 
 		onRemovePeople: function(email) {
+
 			var self = this;
 
 			var i = array.indexOf({email: email});
@@ -162,6 +169,7 @@ define([
 		},	
 
 		addPeople: function(e) {
+
 			var self = this;
 
 			e.preventDefault();
@@ -175,6 +183,7 @@ define([
 		},
 
 		removePeople: function(e) {
+
 			var self = this;
 
 			e.preventDefault();
@@ -196,6 +205,7 @@ define([
 		},
 
 		addTask: function(e) {
+
 			var self = this;
 
 			e.preventDefault();
@@ -220,6 +230,7 @@ define([
 		},
 
 		removeTask: function(e) {
+
 			var self = this;
 
 			e.preventDefault();
@@ -233,6 +244,61 @@ define([
 			task.destroy({success: function(){
 				self.theBucket.fetch();
 			}});
+		},
+
+		onDrop: function(e) {
+
+			var self = this;
+			var $this = $(e.currentTarget);
+			var $slot = $this.parent().parent();
+			var $dropZone = $this.find('.dropzone');
+			var files = e.currentTarget.files;
+			
+			$dropZone.removeClass('is-hovered');
+			$slot.addClass('is-contain-file');
+
+			_.each(files, function(file) {
+
+				file.sizeFormated = self.fileSizeSI(file.size);
+
+			 	var templateFile = _.template(fileUploadTemplate);
+			 	templateFile = templateFile(file);
+			 	$slot.prepend(templateFile);
+			});
+
+			self.addFile(e);
+		},
+
+
+		addFile: function(e) {
+
+			var self = this;
+			var $this = $(e.currentTarget);
+			var files = e.currentTarget.files;
+			var data = new FormData();
+			var token = self.session.get('token');
+			var contributor = $this.data('contributor');
+			var task = $this.data('task');
+			var erase = false;
+
+			_.forEach(files, function(file){
+				data.append('files', file);
+			});
+
+			$.ajax({
+				url: 'https://damp-ridge-1156.herokuapp.com/file?token=' + token + '&contributor=' + contributor + '&task=' + task + '&erase=' + erase,
+				data: data,
+				contentType: false,
+        		processData: false,
+				crossDomain: true,
+    			xhrFields: {
+    				withCredentials: true
+    			},
+				type: 'POST',
+				success: function(data) {
+					// Handle success event
+				}
+			});
 		},
 
 		/**
@@ -256,20 +322,18 @@ define([
 		 */
 
 		highlightDropZone:function(e) {
-		 	e.preventDefault();
+			e.preventDefault();
 
-		 	var $dropZone = $(e.currentTarget);
-		 	$dropZone.addClass('is-hovered');
+			var $dropZone = $(e.currentTarget);
+			$dropZone.addClass('is-hovered');
 		},
-
 
 		unhighlightDropZone:function(e) {
-		 	e.preventDefault();
+			e.preventDefault();
 
-		 	var $dropZone = $(e.currentTarget);
-		 	$dropZone.removeClass('is-hovered');
+			var $dropZone = $(e.currentTarget);
+			$dropZone.removeClass('is-hovered');
 		},
-
 
 		/** 
 		 *	Convert size to readable size 
@@ -279,6 +343,7 @@ define([
 		fileSizeSI:function(a,b,c,d,e){
 			 return (b=Math,c=b.log,d=1e3,e=c(a)/c(d)|0,a/b.pow(d,e)).toFixed(2)+' '+(e?'kMGTPEZY'[--e]+'B':'Bytes');
 		},
+
 
 
 		/**
@@ -386,36 +451,9 @@ define([
 
 				});
 
-
-
-				// var PAGE_TO_VIEW = 1;
-
-				// var container = document.querySelector('.popup_viewer--pdfs');
-
-				// // Loading document.
-				// PDFJS.getDocument(pdfUrl).then(function (pdfDocument) {
-				//   // Document loaded, retrieving the page.
-				//   return pdfDocument.getPage(PAGE_TO_VIEW).then(function (pdfPage) {
-				//   	var ratio = 840 / pdfPage.pageInfo.view[2];
-				//   	console.log(ratio);
-				//     // Creating the page view with default parameters.
-				//     var pdfPageView = new PDFJS.PDFPageView({
-				//       container: container,
-				//       id: PAGE_TO_VIEW,
-				//       scale: 1,
-				//       defaultViewport: pdfPage.getViewport(ratio)
-				//     });
-				//     // Associates the actual page with the view, and drawing it
-				//     pdfPageView.setPdfPage(pdfPage);
-				//     return pdfPageView.draw();
-				//   });
-				// });
 			}
 
 		},
-
-
-
 
 	});
 
