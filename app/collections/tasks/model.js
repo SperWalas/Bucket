@@ -24,8 +24,7 @@ define([
             bucket: {},
         },
 
-        url: '/task'
-
+        urlRoot: '/task'
     });
 
     return TaskModel;

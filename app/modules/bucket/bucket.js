@@ -53,6 +53,8 @@ define([
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
 			'click .page_bucket--people .btn-download' : 'removePeople',
 
+			'click .page_bucket--doc .btn-download' : 'removeTask',
+
 			'dragenter .dropzone' : 'highlightDropZone',
 		    'dragleave .dropzone' : 'unhighlightDropZone',
 		    'change input[type="file"]' : 'dropFile',
@@ -204,6 +206,22 @@ define([
 				tasks.push(response);
 				self.theBucket.set('tasks', tasks);
 				self.theBucket.save();
+			}});
+		},
+
+		removeTask: function(e) {
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $this = $(e.currentTarget);
+			var id = $this.data('id');
+			var task = new TaskModel({
+				id: id
+			});
+			task.destroy({success: function(){
+				self.theBucket.fetch();
 			}});
 		},
 
