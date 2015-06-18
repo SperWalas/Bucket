@@ -93,6 +93,7 @@ define([
 			var self = this;
 
 			var bucket = self.theBucket.toJSON();
+
 			var template = _.template(mainTemplate);
 			template = template({bucket: bucket});
 
