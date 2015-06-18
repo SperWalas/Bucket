@@ -8,7 +8,7 @@
 			<p class="page_bucket--header--notification">
 				<span class="board_number"><%= bucket.percent %>% complété</span>
 				<span class="people_number"><%= bucket.contributors.length + (bucket.contributors > 1 ? ' personnes' : ' personne') %></span>
-				<span class="review_number">15 fichiers à examiner</span>
+				<span class="review_number"><%= bucket.files > 1 ? bucket.files + ' fichiers' : bucket.files === 1 ? bucket.files + ' fichier' : 'Aucun fichier' %> à examiner</span>
 			</p>
 			<span>
 		</div>
