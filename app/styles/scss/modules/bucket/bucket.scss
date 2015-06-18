@@ -466,6 +466,10 @@
 		margin-right: 10px; 
 		h3 {
 			font-size:1.6rem; 
+			height:18px;
+			overflow:hidden; 
+			white-space: nowrap; 
+			text-overflow: ellipsis;
 			color:$text-third;
 			margin:4px 0 3px; 
 		}
@@ -536,9 +540,11 @@
 	}
 
 	.popup--header {
+		position:relative; 
 		height:90px;
 		padding:20px 24px;
 		border:1px solid #DADADA;
+		text-align:center; 
 	}
 	
 	.popup--container {
@@ -546,8 +552,53 @@
 		position:relative; 
 	}
 
+
+	&--navigate {
+		position:absolute; 
+		left:50%;
+		top:30px;
+		display:inline-block;
+		line-height: 1; 
+		@include transform(translateX(-50%));
+		ul {
+			display:block;
+			margin-bottom:5px; 
+			li {
+				display:inline-block; 
+				text-align:center;
+				font-weight:500; 
+				color:$text-third;
+				font-size:1.4rem; 
+			}
+		}
+		a {
+			display:inline-block; 
+			margin:0 10px;
+			float:none; 
+			width:7px; height:11px; 
+			background:url('/app/img/icon/icon-arrow-left-carousel.svg') center no-repeat;
+			background-size:cover; 
+			&:hover {
+				opacity:0.5;
+			}
+			&:first-of-type {
+				@include transform(rotate(180deg));
+			}
+		}
+		&--wrap {
+			width:100px;
+			margin:0 auto; 
+		}
+		&--count {
+			font-size:1.4rem; 
+			color:$text-second;
+			display:inline-block; 
+		}
+	}
+
 	
 	&--pdfs {
+		position:relative; 
 		min-height:500px;
 		max-height:calc(90vh - 90px);
 		overflow-y:scroll; 
@@ -556,10 +607,18 @@
 	}
 
 
+	&--pdf {
+		float:left;
+		width:840px;
+		overflow:hidden;  
+	}
+
+
 	&--info {
 		width:40%; 
 		float:left; 
 		line-height:1; 
+		text-align: left;
 		h2 {
 			float:none; 
 			font-weight:300; 
@@ -596,6 +655,9 @@
 			}
 			&:first-child {
 				border-right:1px solid #DADADA
+			}
+			&:hover {
+				background:#F3F3F3;
 			}
 		}
 
@@ -635,6 +697,7 @@
 
 
 	&--pdfs--option {
+		display:none; 
 		position:absolute; 
 		left:50%; top:80%;
 		margin-left:-80px;
@@ -658,7 +721,19 @@
 				background:url('/app/img/icon/icon-print.svg') center no-repeat;
 				background-size:cover;
 			}
+			&:hover {
+
+			}
 		} 
+	}
+
+
+	&:hover {
+
+		.popup_viewer--pdfs--option {
+			display:block; 
+		}
+
 	}
 
 }

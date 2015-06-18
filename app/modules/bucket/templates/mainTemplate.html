@@ -96,13 +96,14 @@
 							<li class="page_bucket--doc--people">
 						<% } %>
 
+
 							<% if( _.size(contributor.tasks[idx].file) > 0 ) {  %>
 								
 								<% _.each(contributor.tasks[idx].file, function(file) { %>
 
 									<div class="slot--file is-pdf">
 										<i></i>
-										<a href="" class="slot--file--info" data-url="<%= file.url %>">
+										<a href="" class="slot--file--info" data-taskId="<%= task.id %>" data-fileId="<%= file.id %>" data-contributorId="<%= contributor.id %>">
 											<h3 class="slot--file--title"><%= file.name %></h3>
 											<p class="slot--file--size"><%= file.sizeFormated %></p>
 										</a>
@@ -112,6 +113,9 @@
 								<% }) %>
 
 							<% } %>
+
+
+						<% if( _.size(contributor.tasks[idx].file) < 2 ) { %>
 
 							<div class="dropzone">
 								<div>
@@ -125,7 +129,13 @@
 								</div>
 								<input type="file" name="files[]" accept="application/pdf" multiple data-task="<%= task.id %>" data-contributor="<%= contributor.email %>"/>
 							</div>
+
+
+						<% } %>
+
+
 						</li>
+
 
 					<% }); %>
 					</ul>
