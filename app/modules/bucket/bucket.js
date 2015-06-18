@@ -45,7 +45,11 @@ define([
 			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
 			'submit .page_bucket--docs_new form' : 'addFileRow',
 
-			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup'
+			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
+
+			'dragenter .dropzone' : 'highlightDropZone',
+		    'dragleave .dropzone' : 'unhighlightDropZone',
+		    'drop .dropzone' : 'dropFile',
 		},
 
 
@@ -59,13 +63,13 @@ define([
 			var self = this;
 
 			// Get the bucket
-			self.bucket = new BucketModel({
+			self.theBucket = new BucketModel({
 				id: self.id
 			});
-			self.bucket.fetch();
+			self.theBucket.fetch();
 
 			// Binding
-			self.listenTo(self.bucket, 'reset add change remove', this.render, this);
+			self.listenTo(self.theBucket, 'reset add change remove', this.render, this);
 		},
 
 
@@ -80,7 +84,7 @@ define([
 
 			var self = this;
 
-			var bucket = self.bucket.toJSON();
+			var bucket = self.theBucket.toJSON();
 			var template = _.template(mainTemplate, {bucket: bucket});
 
 			$(self.elPage).html(template);
@@ -167,8 +171,29 @@ define([
 
 			self.render();
 
-
 		},
+
+
+
+
+		/**
+		 *	Dropzone
+		 */
+
+		 highlightDropZone:function(e) {
+		 	e.preventDefault();
+
+		 	var $dropZone = $(e.currentTarget);
+		 	$dropZone.addClass('is-hovered');
+		 },
+
+
+		 unhighlightDropZone:function(e) {
+		 	e.preventDefault();
+
+		 	var $dropZone = $(e.currentTarget);
+		 	$dropZone.removeClass('is-hovered');
+		 },
 
 
 
