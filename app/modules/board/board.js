@@ -64,12 +64,17 @@ define([
 			self.session.load();
 
 			self.buckets = new BucketCollection();
-			self.buckets.fetch();
+			self.buckets.fetch({done: function(){
+				// If no buckets
+				if (!_.size(self.buckets)) {
+					self.render();
+				}
+			}});
 
 			// Binding
 			self.listenTo(self.buckets, 'add', self.saveBucket, self);
 			self.listenTo(self.buckets, 'remove', self.destroyBucket, self);
-			self.listenTo(self.buckets, 'add change remove', self.render, self);
+			self.listenTo(self.buckets, 'add change remove ', self.render, self);
 		},
 
 
