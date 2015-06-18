@@ -84,13 +84,10 @@ define([
 			var self = this;
 
 			var buckets = self.buckets.toJSON();
-			console.log(buckets);
-			console.log(self.getFilesNumber(buckets));
 			var template = _.template(mainTemplate);
 			template = template({buckets: buckets, files: self.getFilesNumber(buckets)});
 
 			$(self.elPage).html(template);
-			console.log(buckets);
 
 			return self;
 
