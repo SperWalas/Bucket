@@ -114,6 +114,7 @@ define([
 			var self = this;
 
 			e.preventDefault();
+			e.stopPropagation();
 
 			self.session.logout(self.logoutCallback.bind(self));
 		},
@@ -122,12 +123,8 @@ define([
 
 			var self = this;
 
-			if (status) {
-				self.goToPage('/');
-				self.render();
-			} else {
-				// Handle error
-			}
+			self.goToPage('/');
+			self.render();
 		}
 
 	});

@@ -20,7 +20,8 @@ define([
     var SessionModel = Backbone.Model.extend({
 
         defaults: {
-            token: false
+            token: false,
+            invite: false
         },
 
         url: '/session',
@@ -31,6 +32,10 @@ define([
 
         authenticated: function() {
             return Boolean(this.get('token'));
+        },
+
+        invited: function() {
+            return Boolean(this.get('invite'));
         },
 
         login: function(username, password, callback) {
@@ -57,9 +62,29 @@ define([
 
             var self = this;
 
+            self.deleteCredentials();
+
             self.destroy({
                 success: function() {
-                    self.deleteCredentials();
+                    callback(true);
+                },
+                error: function() {
+                    callback(false);
+                }
+            });
+        },
+
+        invite: function(token, callback) {
+            var self = this;
+
+            self.set({
+                token: token,
+                invite: true
+            });
+
+            self.save(null, {
+                success: function(model, response, options) {
+                    self.saveCredentials(response);
                     callback(true);
                 },
                 error: function() {
@@ -69,11 +94,18 @@ define([
         },
 
         saveCredentials: function(response) {
-            Cookies.set('token', response.token).set('email', response.email).set('id', response.id).set('name', response.name);
+
+            if (this.invited()) {
+                Cookies.set('token', this.get('token')).set('invite', this.get('invite'));
+            } else {
+                Cookies.set('token', response.token);
+            }
+
+            Cookies.set('email', response.email).set('id', response.id).set('name', response.name).set('invite', this.get('invite'));
         },
 
         deleteCredentials: function() {
-            Cookies.expire('token').expire('email').expire('id').expire('name');
+            Cookies.expire('token').expire('email').expire('id').expire('name').expire('invite');
         },
 
         load: function() {
@@ -81,7 +113,8 @@ define([
                 token: Cookies.get('token'),
                 email: Cookies.get('email'),
                 id: Cookies.get('id'),
-                name: Cookies.get('name')
+                name: Cookies.get('name'),
+                invite: Cookies.get('invite')
             });
         }
     });

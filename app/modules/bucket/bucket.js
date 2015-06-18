@@ -14,11 +14,13 @@ define([
   'jquery',
   'lodash',
   'backbone',
+  'cookies',
 
   'collections/buckets/model',
   'collections/tasks/model',
   'collections/session/model',
   'collections/files/model',
+  'collections/invite/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
@@ -29,7 +31,7 @@ define([
   'pdfViewer',
 
 
-], function($, _, Backbone, BucketModel, TaskModel, Session, FileModel, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
+], function($, _, Backbone, Cookies, BucketModel, TaskModel, Session, FileModel, InviteModel, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -76,17 +78,25 @@ define([
 		 *	Init Home view 
 		 */
 
-		initialize: function() {
+		initialize: function(options) {
 
 			var self = this;
 
 			self.session = new Session();
 
-			// Get the bucket
-			self.theBucket = new BucketModel({
-				id: self.id
-			});
-			self.theBucket.fetch();
+			if (self.session.invited() || options.token) {
+				self.theBucket = new InviteModel({
+					token: options.token
+				});
+
+				self.theBucket.save();
+			} else {
+				self.theBucket = new BucketModel({
+					id: options.id
+				});
+
+				self.theBucket.fetch();
+			}
 
 			// Binding
 			self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
@@ -105,6 +115,8 @@ define([
 			var self = this;
 
 			var bucket = self.theBucket.toJSON();
+
+			console.log(bucket);
 
 			var template = _.template(mainTemplate);
 			template = template({bucket: bucket});
