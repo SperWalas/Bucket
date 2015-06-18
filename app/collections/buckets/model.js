@@ -19,10 +19,10 @@ define([
     var BucketModel = Backbone.Model.extend({
 
         defaults: {
-            id: '',
-            name : '',
-            tasks : {},
-            authors : {}
+            name: '',
+            authors: [],
+            tasks: [],
+            users: []
         },
         
         urlRoot: '/bucket',
@@ -31,9 +31,11 @@ define([
         initialize : function() {},
 
         parse: function(response) {
+
             var contributors = [];
             var accomplished = 0;
             var percent = 0;
+            var files = 0;
             var data;
             var exist;
             var index;
@@ -43,6 +45,8 @@ define([
                 if (task.accomplish) {
                     accomplished++;
                 }
+
+                files += _.size(task.files);
 
                 _.forEach(task.contributors, function(contributor) {
 
@@ -65,11 +69,16 @@ define([
                 });
             });
 
-            percent = (accomplished / response.tasks.length) * 100;
+
+            if (typeof response.tasks !== 'undefined' && response.tasks.length > 0) {
+                percent = (accomplished / response.tasks.length) * 100;
+            }
 
             response.contributors = contributors;
+            response.users = contributors;
             response.percent = percent;
             response.accomplished = accomplished;
+            response.files = files;
 
             return response;
         }
