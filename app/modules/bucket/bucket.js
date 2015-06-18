@@ -12,7 +12,7 @@
 
 define([
   'jquery',
-  'underscore',
+  'lodash',
   'backbone',
 
   'collections/buckets/model',
@@ -47,9 +47,10 @@ define([
 		events: {
 			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
 			'submit .page_bucket--docs_new form' : 'addFileRow',
-			'submit .popup_bucket_creation_people form' : 'addPeople',
 
+			'submit .popup_bucket_creation_people form' : 'addPeople',
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
+			'click .page_bucket--people .btn-download' : 'removePeople',
 
 			'dragenter .dropzone' : 'highlightDropZone',
 		    'dragleave .dropzone' : 'unhighlightDropZone',
@@ -89,7 +90,8 @@ define([
 			var self = this;
 
 			var bucket = self.theBucket.toJSON();
-			var template = _.template(mainTemplate, {bucket: bucket});
+			var template = _.template(mainTemplate);
+			template = template({bucket: bucket});
 
 			$(self.elPage).html(template);
 
@@ -114,7 +116,8 @@ define([
 
 			// Template popup add people
 			bucket = self.theBucket.toJSON();
-			var popupTemplate = _.template(createPeopleTemplate, bucket);
+			var popupTemplate = _.template(createPeopleTemplate);
+			popupTemplate = popupTemplate(bucket);
 			self.$el.append(popupTemplate);
 
 			$('#bucket_people').tagsInput({
@@ -157,6 +160,27 @@ define([
 			self.theBucket.set('users', users);
 			self.theBucket.save();
 			self.hidePopup();
+		},
+
+		removePeople: function(e) {
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $this = $(e.currentTarget);
+			var email = $this.data('email');
+			var users = self.theBucket.get('users');
+			console.log(_.prototype);
+			var index = _.findIndex(users, {
+				email: email
+			});
+
+			if (index != -1) {
+				users.splice(index, 1);
+			}
+
+			console.log(users);
 		},
 
 
@@ -262,7 +286,8 @@ define([
 
 		 		file.sizeFormated = self.fileSizeSI(file.size);
 
-			 	var templateFile = _.template(fileUploadTemplate, file);
+			 	var templateFile = _.template(fileUploadTemplate);
+			 	templateFile = templateFile(file);
 			 	$slot.prepend(templateFile);
 
 		 	});
