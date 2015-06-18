@@ -44,19 +44,19 @@
 								<ul>
 									<li><a href="" class="btn-download"><i></i>Télécharger les documents</a></li>
 									<li><a href="" class="btn-archive" data-id="<%= bucket.id %>"><i></i>Archiver le bucket</a></li>
+									<li><a href="" class="btn-delete" data-id="<%= bucket.id %>"><i></i>Supprimer le bucket</a></li>
 								</ul>
 							</div>
 						</div>
 						<h2 class="card_bucket--title"><a href="/bucket/<%= bucket.id %>"><%= bucket.name %></a></h2>
 						<div class="card_bucket--info">
 							<span class="bucket_completion"><i></i><%= bucket.percent %>% complété</span>
-							<span class="bucket_user"><i></i>
-							<% if (typeof bucket.contributors !== 'undefined' && bucket.contributors.length > 0) { %>
-								<% _.forEach(bucket.contributors, function(contributor, index) { %>
+							<span class="bucket_user"><i></i><% 
+							if (typeof bucket.contributors !== 'undefined' && bucket.contributors.length > 0) { 
+								_.forEach(bucket.contributors, function(contributor, index) { %>
 									<%= contributor.name + (index < bucket.contributors.length - 1 ? ',' : '') %>
-								<% }) %>
-							<% } else { %>
-								Aucune personne
+								<% })
+							} else { %>Aucune personne
 							<% } %>
 							</span>
 						</div>

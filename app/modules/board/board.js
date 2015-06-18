@@ -47,7 +47,7 @@ define([
 			'click .btn-new-bucket' : 'showBucketCreationPopup',
 			'submit .popup_bucket_creation form' : 'createBucket',
 			'click .popup_bucket_creation .popup--btn-close' : 'hidePopup',
-			'click .btn-archive' : 'archiveBucket'
+			'click .btn-delete' : 'deleteBucket'
 		},
 
 
@@ -122,7 +122,7 @@ define([
 			});
 		},
 
-		archiveBucket: function(e) {
+		deleteBucket: function(e) {
 			var self = this;
 
 			e.preventDefault();
