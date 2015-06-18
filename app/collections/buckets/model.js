@@ -33,6 +33,7 @@ define([
         parse: function(response) {
 
             var contributors = [];
+            var users = [];
             var accomplished = 0;
             var percent = 0;
             var files = 0;
@@ -56,8 +57,9 @@ define([
 
                     if (exist === undefined) {
                         data = {};
-                        data.name = contributor.name || 'User';
                         data.email = contributor.email;
+                        users.push(data);
+                        data.name = contributor.name || 'User';
                         data.tasks = [];
                         data.tasks.push(task.id);
                         contributors.push(data);
@@ -75,7 +77,7 @@ define([
             }
 
             response.contributors = contributors;
-            response.users = contributors;
+            response.users = users;
             response.percent = percent;
             response.accomplished = accomplished;
             response.files = files;
