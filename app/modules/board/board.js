@@ -16,14 +16,15 @@ define([
   'backbone',
 
   'collections/buckets/collection',
+  'collections/buckets/model',
+  'collections/session/model',
 
   'text!modules/board/templates/mainTemplate.html',
-  'text!modules/board/templates/createNameTemplate.html',
-  'text!modules/board/templates/createPeopleTemplate.html',
+  'text!modules/board/templates/createBucketTemplate.html',
 
   'jqueryTag'
 
-], function($, _, Backbone, BucketCollection, mainTemplate, createNameTemplate, createPeopleTemplate) {
+], function($, _, Backbone, BucketCollection, BucketModel, Session, mainTemplate, createBucketTemplate) {
 
 
 	var BoardView = Backbone.View.extend({
@@ -43,11 +44,10 @@ define([
 		 */
 		 
 		events: {
-			'click .btn-new-bucket, .popup_bucket_creation_people .btn-back' : 'startCreateBucket',
-			'submit .popup_bucket_creation form' : 'startAddPeopleBucket',
-			'submit .popup_bucket_creation_people' : 'publishBucket',
-
-			'click .popup_bucket_creation .popup--btn-close, .popup_bucket_creation_people .popup--btn-close' : 'hidePopup'
+			'click .btn-new-bucket' : 'showBucketCreationPopup',
+			'submit .popup_bucket_creation form' : 'createBucket',
+			'click .popup_bucket_creation .popup--btn-close' : 'hidePopup',
+			'click .btn-archive' : 'archiveBucket'
 		},
 
 
@@ -60,7 +60,9 @@ define([
 
 			var self = this;
 
-			// Init new bucket model, in case
+			self.session = new Session();
+			self.session.load();
+
 			self.buckets = new BucketCollection();
 			self.buckets.fetch();
 
@@ -80,7 +82,7 @@ define([
 			var self = this;
 
 			var buckets = self.buckets.toJSON();
-			var template = _.template(mainTemplate, {buckets: buckets});
+			var template = _.template(mainTemplate, {buckets: buckets, files: self.getFilesNumber(buckets)});
 
 			$(self.elPage).html(template);
 			console.log(buckets);
@@ -89,30 +91,35 @@ define([
 
 		},
 
-
-
 		/**
 		 *	Lunch creation of bucket
 		 */
 
-		startCreateBucket: function(e) {
+		showBucketCreationPopup: function(e) {
+			var self = this;
 
 			e.preventDefault();
 			e.stopPropagation();
 
-			var self = this;
-
-			// Save last email
-			self.newBucket.set('emailTag', $('.tagsinput .tag').text().split('x').join(',').slice(0, - 1));
-
-			var popupTemplate = _.template(createNameTemplate, self.newBucket.toJSON() );
-
 			self.hidePopup();
-			self.$el.append(popupTemplate);
-
+			self.$el.append(createBucketTemplate);
 		},
 
+		createBucket: function(e) {
+			var self = this;
 
+			e.preventDefault();
+
+			var bucket = new BucketModel();
+			var $form = $(e.currentTarget);
+			var name = $form.find('input[name="name"]').val();
+
+			bucket.set('name', name);
+			bucket.set('authors', [
+				self.session.get('id')
+			]);
+			bucket.save();
+		},
 
 		/**
 		 *	Show second popup of creation
@@ -145,6 +152,19 @@ define([
 
 		},
 
+		archiveBucket: function(e) {
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $this = $(e.currentTarget);
+
+			var bucket = self.buckets.findWhere({ id: $this.data('id') });
+
+			bucket.destroy();
+		},
+
 
 
 		/**
@@ -161,6 +181,16 @@ define([
 			}
 			$('.popup').remove();
 
+		},
+
+		getFilesNumber: function(buckets) {
+			var files = 0;
+
+			_.forEach(buckets, function(bucket){
+				files += bucket.files;
+			});
+
+			return files;
 		}
 
 

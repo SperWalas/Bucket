@@ -46,7 +46,7 @@ define([
 
             self.save(null, {
                 success: function(model, response, options) {
-                    self.saveToken(response);
+                    self.saveCredentials(response);
                     callback(true);
                 },
                 error: function() {
@@ -70,16 +70,18 @@ define([
             });
         },
 
-        saveToken: function(token) {
-            Cookies.set('token', token);
+        saveCredentials: function(response) {
+            Cookies.set('token', response.token).set('email', response.email).set('id', response.id);
         },
 
         deleteToken: function() {
-            Cookies.expire('token');
+            Cookies.expire('token').expire('email').expire('id');
         },
 
         load: function() {
             this.set('token', Cookies.get('token'));
+            this.set('email', Cookies.get('email'));
+            this.set('id', Cookies.get('id'));
         }
     });
 
