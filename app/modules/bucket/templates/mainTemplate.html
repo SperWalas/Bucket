@@ -109,7 +109,8 @@
 					
 							<% if( _.size(contributor.tasks[idx].file) > 0 ) {  %>
 
-								<% if( _.size(_.findLast(bucket.tasks[idx].comments, { userId: contributor.id })) > 0 ) { %>
+								<% if( _.size(_.findLast(bucket.tasks[idx].comments, { userId: contributor.id })) > 0 
+										&& _.size( _.where(contributor.tasks[idx].file, { accepted : true })) != contributor.tasks[idx].file.length ) { %>
 									<div class="slot--file--comment">
 										<i></i>
 										<p> <%= _.findLast(bucket.tasks[idx].comments, { userId: contributor.id }).content %></p>

@@ -1349,6 +1349,21 @@ form button[type="submit"] {
 .popup_viewer--option--comment.is-comment:hover {
   background: #FF6C55;
 }
+.popup_viewer--option--comment.is-comment.is-review {
+  background: #fff;
+}
+.popup_viewer--option--comment.is-comment.is-review:hover {
+  background: #fff;
+}
+.popup_viewer--option--comment.is-comment.is-review a > span {
+  color: #BBBBBB;
+}
+.popup_viewer--option--comment.is-comment.is-review svg {
+  width: 100%;
+}
+.popup_viewer--option--comment.is-comment.is-review svg path {
+  fill: #BBBBBB;
+}
 .popup_viewer--option--comment:hover .popup_viewer--option--comment--window {
   display: block;
 }

@@ -902,6 +902,21 @@
 				&:hover {
 					background:#FF6C55;
 				} 
+				&.is-review {
+					background:#fff;
+					&:hover {
+						background:#fff;
+					}
+					a > span {
+						color:#BBBBBB;
+					}
+					svg {
+						width:100%; 
+						path {
+							fill:#BBBBBB;
+						}	
+					} 
+				}
 			}
 			&:hover {
 				.popup_viewer--option--comment--window {
