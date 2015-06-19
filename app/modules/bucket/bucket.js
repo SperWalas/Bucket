@@ -23,6 +23,7 @@ define([
   'collections/files/model',
   'collections/invite/model',
   'collections/users/model',
+  'collections/comments/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
@@ -34,7 +35,7 @@ define([
   'pdfViewer',
 
 
-], function($, _, Backbone, Cookies, moment, BucketModel, TaskModel, Session, FileModel, InviteModel, UserModel, mainTemplate, createPeopleTemplate, createUserTemplate, fileUploadTemplate, viewerPDFTemplate) {
+], function($, _, Backbone, Cookies, moment, BucketModel, TaskModel, Session, FileModel, InviteModel, UserModel, CommentModel, mainTemplate, createPeopleTemplate, createUserTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -72,6 +73,7 @@ define([
 			'click .popup_viewer--navigate--prev' : 'prevPDF',
 			'click .popup_viewer--navigate--next' : 'nextPDF',
 			'click .popup_viewer--option--review a' : 'reviewPDF',
+			'submit .popup_viewer--option--comment--window form' : 'addComment',
 
 			'dragenter .dropzone' : 'highlightDropZone',
 			'dragleave .dropzone' : 'unhighlightDropZone',
@@ -509,7 +511,6 @@ define([
 		  	var comments = _.where(task[0].comments, { userId : peopleIdAsked });
 		  	comments = _.map(comments, function(comment) {
 		  		comment.dateFormated = moment(comment.createdAt, moment.ISO_8601).format('DD/MM/YYYY, HH:hh');
-		  		console.log(comment);
 		  		return comment;
 		  	});
 
@@ -684,6 +685,37 @@ define([
 						}
 					});
 
+				}
+			});
+
+		},
+
+
+
+		/**
+		 *	Add commentaire
+		 */
+
+		addComment:function(e) {
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var self = this;
+			var $form = $(e.currentTarget);
+			var author = self.session.toJSON();
+
+			var comment = new CommentModel({
+				"author": author.email,
+				"userId": $form.find('#userId_comment'),
+				"name": author.name,
+				"content": $form.find('#text_comment'),
+				"task": $form.find('#taskId_comment')
+			});
+
+			comment.save(null, {
+				success: function() {
+					console.log('comment add');
 				}
 			});
 

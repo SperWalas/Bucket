@@ -669,7 +669,7 @@ form button[type="submit"] {
 .page_bucket--people--option {
   position: absolute;
   right: 21px;
-  top: 20px;
+  top: 16px;
   cursor: pointer;
 }
 .page_bucket--people--option > div {
@@ -1021,6 +1021,39 @@ form button[type="submit"] {
   background-size: cover;
 }
 
+.slot--file--comment {
+  display: block;
+  width: 340px;
+  height: 34px;
+  padding: 0 10px;
+  margin: 10px;
+  border-radius: 4px;
+  box-shadow: 0 1px 0 0 #EEEEEE;
+  background: #3C80F4;
+  overflow: hidden;
+  line-height: 34px;
+}
+.slot--file--comment > i {
+  display: inline-block;
+  vertical-align: middle;
+  width: 12px;
+  height: 11px;
+  margin-right: 7px;
+  background: url("/app/img/icon/icon-comment.svg") center no-repeat;
+  background-size: cover;
+}
+.slot--file--comment p {
+  width: 80%;
+  display: inline-block;
+  vertical-align: middle;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: #fff;
+  font-size: 1.4rem;
+  font-weight: 500;
+}
+
 /**
  *	Popup creation
  */
@@ -1315,6 +1348,21 @@ form button[type="submit"] {
 }
 .popup_viewer--option--comment.is-comment:hover {
   background: #FF6C55;
+}
+.popup_viewer--option--comment.is-comment.is-review {
+  background: #fff;
+}
+.popup_viewer--option--comment.is-comment.is-review:hover {
+  background: #fff;
+}
+.popup_viewer--option--comment.is-comment.is-review a > span {
+  color: #BBBBBB;
+}
+.popup_viewer--option--comment.is-comment.is-review svg {
+  width: 100%;
+}
+.popup_viewer--option--comment.is-comment.is-review svg path {
+  fill: #BBBBBB;
 }
 .popup_viewer--option--comment:hover .popup_viewer--option--comment--window {
   display: block;

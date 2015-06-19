@@ -33,7 +33,7 @@
 
 			<% if (!session.invite) { %>
 				<div class="popup_viewer--option">
-					<div class="popup_viewer--option--comment <% if (_.size(comments) > 0 ) { %> is-comment <% } %>">
+					<div class="popup_viewer--option--comment <% if (_.size(comments) > 0 ) { %> is-comment <% } %> <% if( reviewed ) { %> is-review <% } %>">
 						<a href="#">
 							<i><svg width="21" height="18" viewBox="0 0 21 18" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><path d="M10.873 0c-5.591 0-10.127 3.551-10.127 7.922 0 1.939.895 3.715 2.377 5.092l-.475 2.403c-.399 2.145.336 2.516 2.046 1.455l2.314-1.625c1.19.387 2.497.597 3.864.597 5.592 0 10.127-3.548 10.127-7.922s-4.534-7.922-10.127-7.922z" sketch:type="MSShapeGroup" fill="#bbb"/></svg></i>
 							<span><%= _.size(comments) %></span>
@@ -56,6 +56,8 @@
 								</ul>
 								<form action="">
 									<input type="text" id="text_comment" placeholder="Commentaire...">
+									<input type="hidden" id="userId_comment" value="<%= user.id %>">
+									<input type="hidden" id="taskId_comment" value="<%= task.id %>">
 									<input type="submit">
 								</form>
 							</div>
