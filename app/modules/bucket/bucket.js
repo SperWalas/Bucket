@@ -201,7 +201,7 @@ define([
 
 			var self = this;
 
-			var i = array.indexOf({email: email});
+			var i = self.people.indexOf({email: email});
 
 			if (i != -1) {
 				self.people.splice(i, 1);
