@@ -18,6 +18,7 @@ define([
 			settings: {
 				root : '/',
 				api : 'https://damp-ridge-1156.herokuapp.com'
+				// api : 'http://localhost:1337'
 			}
 		};
 
