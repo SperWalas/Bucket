@@ -18,6 +18,7 @@ define([
 			settings: {
 				root : '/',
 				api : 'https://damp-ridge-1156.herokuapp.com'
+				// api : 'http://localhost:1337'
 			}
 		};
 
@@ -40,11 +41,13 @@ define([
 
 			if (model.url === '/session') {
 				options.url = app.settings.api + model.url;
+			} else if (_.isFunction(model.url)) {
+				options.url = app.settings.api + model.url() + ( token ? '?' + token : '');
 			} else {
 				if (String(model.url).match(/\?./)) {
-					options.url = app.settings.api + (_.isFunction(model.url) ? model.url() : model.url) + '&' + token;
+					options.url = app.settings.api + model.url + ( token ? '&' + token : '');
 				} else {
-					options.url = app.settings.api + (_.isFunction(model.url) ? model.url() : model.url) + '?' + token;
+					options.url = app.settings.api + model.url + ( token ? '?' + token : '');
 				}
 			}
 

@@ -398,8 +398,9 @@ define([
 			});
 			
 			user.save(null, {success: function(model, response){
-				response.token = self.session.get('token');
-				self.session.saveCredentials(response);
+				console.log(response);
+				response[0].token = self.session.get('token');
+				self.session.saveCredentials(response[0]);
 				self.session.load();
 				self.theBucket.fetch();
 			}});
