@@ -63,6 +63,7 @@ define([
                     if (exist === undefined) {
                         data = {};
                         data.email = contributor.email;
+                        data.id = contributor.id;
                         users.push(data);
                         data.name = contributor.name || 'User';
                         data.tasks = [];

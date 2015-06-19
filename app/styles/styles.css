@@ -845,6 +845,33 @@ form button[type="submit"] {
 .page_bucket--doc--peoples li.is-guest {
   opacity: 0.5;
 }
+.page_bucket--doc--people.is-reviewed {
+  position: relative;
+}
+.page_bucket--doc--people.is-reviewed::before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: rgba(255, 255, 255, 0.7);
+}
+.page_bucket--doc--people.is-reviewed::after {
+  content: '';
+  width: 34px;
+  height: 34px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  margin: -17px 0 0 -17px;
+  background: url("/app/img/icon/icon-reviewed.svg") center no-repeat;
+  background-size: cover;
+}
+.page_bucket--doc--people.is-reviewed .dropzone {
+  display: none;
+}
 .page_bucket--docs_new {
   width: 100%;
   height: 70px;
@@ -975,6 +1002,10 @@ form button[type="submit"] {
 }
 .slot--file--info h3, .slot--file--no-info h3 {
   font-size: 1.6rem;
+  height: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   color: #767676;
   margin: 4px 0 3px;
 }
@@ -1027,25 +1058,88 @@ form button[type="submit"] {
   margin-left: -420px;
 }
 .popup_viewer .popup--header {
+  position: relative;
   height: 90px;
   padding: 20px 24px;
   border: 1px solid #DADADA;
+  text-align: center;
 }
 .popup_viewer .popup--container {
   padding: 0;
   position: relative;
 }
+.popup_viewer--navigate {
+  position: absolute;
+  left: 50%;
+  top: 30px;
+  display: inline-block;
+  line-height: 1;
+  -webkit-transform: translateX(-50%);
+  -moz-transform: translateX(-50%);
+  -ms-transform: translateX(-50%);
+  -o-transform: translateX(-50%);
+  transform: translateX(-50%);
+}
+.popup_viewer--navigate ul {
+  display: block;
+  margin-bottom: 5px;
+}
+.popup_viewer--navigate ul li {
+  display: inline-block;
+  text-align: center;
+  font-weight: 500;
+  color: #767676;
+  font-size: 1.4rem;
+}
+.popup_viewer--navigate a {
+  display: inline-block;
+  margin: 0 10px;
+  float: none;
+  width: 7px;
+  height: 11px;
+  background: url("/app/img/icon/icon-arrow-left-carousel.svg") center no-repeat;
+  background-size: cover;
+}
+.popup_viewer--navigate a:hover {
+  opacity: 0.5;
+}
+.popup_viewer--navigate a:first-of-type {
+  -webkit-transform: rotate(180deg);
+  -moz-transform: rotate(180deg);
+  -ms-transform: rotate(180deg);
+  -o-transform: rotate(180deg);
+  transform: rotate(180deg);
+}
+.popup_viewer--navigate--wrap {
+  width: 100px;
+  margin: 0 auto;
+}
+.popup_viewer--navigate--count {
+  font-size: 1.4rem;
+  color: #BBBBBB;
+  display: inline-block;
+}
 .popup_viewer--pdfs {
+  position: relative;
   min-height: 500px;
   max-height: calc(90vh - 90px);
   overflow-y: scroll;
   overflow-x: hidden;
   max-height: calc(90vh - 90px);
 }
+.popup_viewer--pdfs--option {
+  display: none;
+}
+.popup_viewer--pdf {
+  float: left;
+  width: 840px;
+  overflow: hidden;
+}
 .popup_viewer--info {
   width: 40%;
   float: left;
   line-height: 1;
+  text-align: left;
 }
 .popup_viewer--info h2 {
   float: none;
@@ -1081,9 +1175,13 @@ form button[type="submit"] {
   text-align: center;
   background: none;
   margin: 0;
+  padding: 0 12px;
 }
 .popup_viewer--option > div:first-child {
   border-right: 1px solid #DADADA;
+}
+.popup_viewer--option > div:hover {
+  background: #F3F3F3;
 }
 .popup_viewer--option--review i {
   line-height: 1;
@@ -1098,6 +1196,29 @@ form button[type="submit"] {
 }
 .popup_viewer--option--review i svg path {
   fill: #bbb;
+}
+.popup_viewer--option--review span {
+  display: none;
+}
+.popup_viewer--option--review.is-review {
+  background: #3C80F4;
+}
+.popup_viewer--option--review.is-review span {
+  display: inline-block;
+  margin-left: 10px;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 500;
+  vertical-align: middle;
+}
+.popup_viewer--option--review.is-review svg {
+  width: 100%;
+}
+.popup_viewer--option--review.is-review svg path {
+  fill: #fff;
+}
+.popup_viewer--option--review.is-review:hover {
+  background: #3C80F4;
 }
 .popup_viewer--option--comment i {
   line-height: 1;
@@ -1114,6 +1235,7 @@ form button[type="submit"] {
   fill: #bbb;
 }
 .popup_viewer--pdfs--option {
+  display: none;
   position: absolute;
   left: 50%;
   top: 80%;
@@ -1140,6 +1262,9 @@ form button[type="submit"] {
 .popup_viewer--pdfs--option a.btn-print {
   background: url("/app/img/icon/icon-print.svg") center no-repeat;
   background-size: cover;
+}
+.popup_viewer:hover .popup_viewer--pdfs--option {
+  display: block;
 }
 
 /**

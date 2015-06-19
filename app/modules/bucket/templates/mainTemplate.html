@@ -97,24 +97,23 @@
 						
 					<ul class="page_bucket--doc--peoples">
 					<% _.each( bucket.contributors, function(contributor) { %>
-	
-						
-						<% if( _.size(contributor.tasks[idx].file) > 0 ) { %>
-							<li class="page_bucket--doc--people is-contain-file <%= !session.invite || (session.email === contributor.email) ? '' : 'is-guest' %>">
-						<% } else { %>
-							<li class="page_bucket--doc--people <%= !session.invite || (session.email === contributor.email) ? '' : 'is-guest' %>">
-						<% } %>
 
+						<li class="page_bucket--doc--people <% if( _.size( _.where(contributor.tasks[idx].file, { accepted : true })) == contributor.tasks[idx].file.length && contributor.tasks[idx].file.length > 0 ) { %> 
+								is-reviewed 
+							<% } else if ( _.size(contributor.tasks[idx].file) > 0 ) { %> 
+								is-contain-file 
+							<% } %>
+							<%= !session.invite || (session.email === contributor.email) ? '' : 'is-guest' %>
+						">
+					
 							<% if( _.size(contributor.tasks[idx].file) > 0 ) {  %>
 								
 								<% _.each(contributor.tasks[idx].file, function(file) { %>
 
 									<div class="slot--file is-pdf">
 										<i></i>
-										
-										
 										<% if (!session.invite || (session.email === contributor.email)) { %>
-											<a href="" class="slot--file--info" data-url="<%= file.url %>">
+											<a href="" class="slot--file--info" data-taskId="<%= task.id %>" data-fileId="<%= file.id %>" data-contributorId="<%= contributor.id %>">
 												<h3 class="slot--file--title"><%= file.name %></h3>
 												<p class="slot--file--size"><%= file.sizeFormated %></p>
 											</a>
@@ -131,7 +130,7 @@
 
 							<% } %>
 
-							<% if (!session.invite || (session.email === contributor.email)) { %>
+							<% if ((_.size(contributor.tasks[idx].file) < 2) && (!session.invite || (session.email === contributor.email))) { %>
 								<div class="dropzone">
 									<div>
 										<i>
@@ -152,6 +151,7 @@
 								</div>
 							<% } %>
 						</li>
+
 
 					<% }); %>
 					</ul>

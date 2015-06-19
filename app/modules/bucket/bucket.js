@@ -68,6 +68,9 @@ define([
 
 			'click .slot--file--info' : 'openPDF',
 			'click .popup_background' : 'hidePopup',
+			'click .popup_viewer--navigate--prev' : 'prevPDF',
+			'click .popup_viewer--navigate--next' : 'nextPDF',
+			'click .popup_viewer--option--review a' : 'reviewPDF',
 
 			'dragenter .dropzone' : 'highlightDropZone',
 			'dragleave .dropzone' : 'unhighlightDropZone',
@@ -486,70 +489,192 @@ define([
 			e.stopPropagation();
 			e.preventDefault();
 
-			var self = this; 
+			// Get all data
+		  	var self = this; 
+		  	var taskIdAsked = $(e.currentTarget).data("taskid");
+		  	var fileIdAsked = $(e.currentTarget).data("fileid");
+		  	var peopleIdAsked = $(e.currentTarget).data("contributorid");
 
-			self.$el.append(viewerPDFTemplate);
+		  	bucket = self.theBucket.toJSON();
 
-			var pdfUrl = $(e.currentTarget).data("url");
-			pdfUrl = 'https://s3.amazonaws.com/buckethostinghetic2/4c1f9aca-54d9-49a5-9b75-66f0abb2cd8e.pdf';
+		  	var task = _.where(bucket.tasks, { id : taskIdAsked });
+
+		  	var files = task[0].files;
+		  	var numberFileAsked = _.findIndex(files, { id : fileIdAsked });
+
+		  	var user = _.where(bucket.contributors, { id : peopleIdAsked });
+
+
+		  	var reviewed = ( _.size( _.where(files, { accepted : true })) == files.length && files.length > 0);
+
+		  	// Template with user, task, files, filesclicked
+		  	var templateFile = _.template(viewerPDFTemplate);
+		 	templateFile = templateFile({ user : user[0], files: files, task : task[0], fileAsked : numberFileAsked, reviewed : reviewed });
+		 	self.$el.append(templateFile);
+
+		 	self.generatePDF(files);
+
+			$('.popup_viewer--pdfs').css('left', -numberFileAsked * $('.popup_viewer--pdfs').width() )
+									.width( files.length * $('.popup_viewer--pdfs').width() + 30 );
+			$('.popup_viewer--navigate ul li').hide().eq(numberFileAsked).show();
+			$('.popup_viewer--pdfs--option').hide().eq(numberFileAsked).show();
+
+		},
 
 
 
-			function handlePages(page) { 
+		generatePDF:function(files) {
 
 
-				var container = document.querySelector('.popup_viewer--pdfs');
+			// Kill if not there
+		  	if (!PDFJS.PDFViewer || !PDFJS.getDocument)
+		  		return;
 
-				//This gives us the page's dimensions at full scale
-				var viewport = page.getViewport( $('.popup_viewer--pdfs').width() / page.getViewport(1.0).width );
 
-				//We'll create a canvas for each page to draw it on
-				var canvas = document.createElement( "canvas" );
-				canvas.style.display = "block";
-				var context = canvas.getContext('2d');
-				canvas.height = viewport.height;
-				canvas.width = viewport.width;
+
+	  		PDFJS.workerSrc = '../vendors/pdfjs-dist/build/pdf.worker.js';
+
+	  		var currPage = 1; //Pages are 1-based not 0-based
+			var numPages = 0;
+			var thePDF = null;
+			var handlePages;
+			var containerCanvas = document.querySelector('.popup_viewer--pdfs');
+			var div;
+
+			_.each(files, function(file) {
+
+				//This is where you start
+				PDFJS.getDocument(file.url).then(function(pdf) {
+
+			        //Set PDFJS global object (so we can easily access in our page functions
+			        thePDF = pdf;
+
+			        // We set new container
+			        var div = document.createElement( "div" );
+			    	div.classList.add("popup_viewer--pdf");
+			        containerCanvas.appendChild( div );
+
+			        //How many pages it has
+			        numPages = pdf.numPages;
+
+			        //Start with first page
+			        pdf.getPage( 1 ).then( handlePages );
+
+				});
+
+			});
+
+
+			handlePages = function(page) { 
+
+			    //This gives us the page's dimensions at full scale
+			    var viewport = page.getViewport( ( ($('.popup_viewer--pdfs').width() - 30 ) / files.length) / page.getViewport(1.0).width );
+
+			    //We'll create a canvas for each page to draw it on
+			    var canvas = document.createElement( "canvas" );
+			    var context = canvas.getContext('2d');
+			    canvas.style.display = "block";
+			    canvas.height = viewport.height;
+			    canvas.width = viewport.width;
 
 				//Draw it on the canvas
 				page.render({canvasContext: context, viewport: viewport});
 
-				//Add it to the web page
-				container.appendChild( canvas );
+			    //Add it to the web page
+			    $('.popup_viewer--pdf').last().append( canvas );
 
-				//Move to next page
-				currPage++;
-				if ( thePDF !== null && currPage <= numPages )
-				{
-					thePDF.getPage( currPage ).then( handlePages );
+			    //Move to next page
+			    currPage++;
+			    if ( thePDF !== null && currPage <= numPages ) {
+			        thePDF.getPage( currPage ).then( handlePages );
+			    }
+
+			};
+
+
+		},
+
+
+		/** 
+		 *	Action en carousel
+		 */
+
+		nextPDF:function(e) {
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var pdfNow = $('.popup_viewer--navigate--count span').text();
+			var nbrPDF = $('.popup_viewer--navigate ul li').length;
+
+			if(pdfNow == nbrPDF)
+				return;
+			else 
+				pdfNow++;
+
+			$('.popup_viewer--pdfs').css('left', -(pdfNow - 1) * $('.popup--container').width() );
+			$('.popup_viewer--navigate--count span').text(pdfNow);
+			$('.popup_viewer--navigate ul li').hide().eq(pdfNow - 1).show();
+			$('.popup_viewer--pdfs--option').hide().eq(pdfNow - 1).show();
+
+		},		
+
+		prevPDF:function(e) {
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var pdfNow = $('.popup_viewer--navigate--count span').text();
+			var nbrPDF = $('.popup_viewer--navigate ul li').length;
+
+			if(pdfNow == 1)
+				return;
+			else 
+				pdfNow--;
+
+			$('.popup_viewer--pdfs').css('left', -(pdfNow - 1) * $('.popup--container').width() );
+			$('.popup_viewer--navigate--count span').text(pdfNow);
+			$('.popup_viewer--navigate ul li').hide().eq(pdfNow - 1).show();
+			$('.popup_viewer--pdfs--option').hide().eq(pdfNow - 1).show();
+
+		},
+
+
+
+
+		/**
+		 *	Review a PDF
+		 */
+
+		reviewPDF:function(e) {
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var self = this;		  	
+			var taskIdAsked = $(e.currentTarget).data("taskid");
+			var userIdAsked = $(e.currentTarget).data("userid");
+			console.log(taskIdAsked, ' id user : ' + userIdAsked);
+			var task = new TaskModel({
+				id: taskIdAsked
+			});
+			task.fetch({
+				success:function(){
+
+					var taskJson = task.toJSON();
+					var newFiles = _.map(taskJson.files, function(file) {
+											if (file.tasks == taskIdAsked && file.users == userIdAsked)
+												file.accepted = true;
+											return file;
+										});
+
+					task.set('files', newFiles);
+					task.save({success: function(){
+						self.theBucket.fetch();
+					}});
+
 				}
-
-			}
-
-
-			if (PDFJS.PDFViewer || PDFJS.getDocument) {
-
-				PDFJS.workerSrc = '../vendors/pdfjs-dist/build/pdf.worker.js';
-
-
-				var currPage = 1; //Pages are 1-based not 0-based
-				var numPages = 0;
-				var thePDF = null;
-
-				//This is where you start
-				PDFJS.getDocument(pdfUrl).then(function(pdf) {
-
-					//Set PDFJS global object (so we can easily access in our page functions
-					thePDF = pdf;
-
-					//How many pages it has
-					numPages = pdf.numPages;
-
-					//Start with first page
-					pdf.getPage( 1 ).then( handlePages );
-
-				});
-
-			}
+			});
 
 		},
 

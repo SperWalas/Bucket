@@ -65,7 +65,7 @@ define([
 
 			self.buckets = new BucketCollection();
 
-			self.buckets.fetch({done: function(){
+			self.buckets.fetch({success: function(){
 				// If no buckets
 				if (!_.size(self.buckets)) {
 					self.render();
