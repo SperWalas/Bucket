@@ -542,6 +542,17 @@ form button[type="submit"] {
 .page_bucket--header--intro {
   float: left;
 }
+.page_bucket--header--notice {
+  margin-top: 17px;
+  float: right;
+}
+.page_bucket--header--notice p {
+  text-align: right;
+  color: #BBBBBB;
+  font-size: 1.4rem;
+  font-weight: 500;
+  line-height: 1.5em;
+}
 .page_bucket--header h1 {
   margin: 17px 0 6px;
   font-size: 2.4rem;
@@ -828,6 +839,12 @@ form button[type="submit"] {
 .page_bucket--doc--peoples li.is-contain-file .dropzone i {
   display: none;
 }
+.page_bucket--doc--peoples li.is-contain-file .no-dropzone {
+  display: none;
+}
+.page_bucket--doc--peoples li.is-guest {
+  opacity: 0.5;
+}
 .page_bucket--docs_new {
   width: 100%;
   height: 70px;
@@ -905,6 +922,28 @@ form button[type="submit"] {
   fill: #3C80F4;
 }
 
+.no-dropzone {
+  position: relative;
+  width: 340px;
+  height: 208px;
+  line-height: 208px;
+  margin: 10px;
+  border-radius: 4px;
+  text-align: center;
+}
+.no-dropzone > div {
+  display: inline-block;
+  vertical-align: middle;
+  line-height: 1;
+}
+.no-dropzone p {
+  text-align: center;
+  color: #BBBBBB;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.5em;
+}
+
 /**
  *	File
  */
@@ -928,18 +967,18 @@ form button[type="submit"] {
   background: url("/app/img/icon/icon-pdf.svg") center no-repeat;
   background-size: cover;
 }
-.slot--file--info {
+.slot--file--info, .slot--file--no-info {
   width: 244px;
   overflow: hidden;
   float: left;
   margin-right: 10px;
 }
-.slot--file--info h3 {
+.slot--file--info h3, .slot--file--no-info h3 {
   font-size: 1.6rem;
   color: #767676;
   margin: 4px 0 3px;
 }
-.slot--file--info p {
+.slot--file--info p, .slot--file--no-info p {
   font-size: 1.4rem;
   color: #BBBBBB;
 }

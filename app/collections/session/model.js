@@ -96,7 +96,7 @@ define([
         saveCredentials: function(response) {
 
             if (this.invited()) {
-                Cookies.set('token', this.get('token')).set('invite', this.get('invite'));
+                Cookies.set('token', this.get('token'));
             } else {
                 Cookies.set('token', response.token);
             }

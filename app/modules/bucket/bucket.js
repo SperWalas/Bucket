@@ -21,9 +21,11 @@ define([
   'collections/session/model',
   'collections/files/model',
   'collections/invite/model',
+  'collections/users/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
+  'text!modules/bucket/templates/createUserTemplate.html',
   'text!modules/bucket/templates/fileUploadTemplate.html',
   'text!modules/bucket/templates/viewerPDFTemplate.html',
 
@@ -31,7 +33,7 @@ define([
   'pdfViewer',
 
 
-], function($, _, Backbone, Cookies, BucketModel, TaskModel, Session, FileModel, InviteModel, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
+], function($, _, Backbone, Cookies, BucketModel, TaskModel, Session, FileModel, InviteModel, UserModel, mainTemplate, createPeopleTemplate, createUserTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -59,6 +61,8 @@ define([
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
 			'click .page_bucket--people .btn-download' : 'removePeople',
 
+			'submit .popup_user_creation form' : 'addName',
+
 			'submit .page_bucket--docs_new form' : 'addTask',
 			'click .page_bucket--doc .btn-download' : 'removeTask',
 
@@ -85,21 +89,34 @@ define([
 			self.session = new Session();
 
 			if (self.session.invited() || options.token) {
-				self.theBucket = new InviteModel({
+
+				var bucket = new InviteModel({
 					token: options.token
 				});
 
-				self.theBucket.save();
+				bucket.save(null, {success: function(model, response){
+
+					self.theBucket = new BucketModel({
+						id: response.id
+					});
+
+					self.theBucket.fetch();
+
+					// Binding
+					self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
+				}});
+
 			} else {
+
 				self.theBucket = new BucketModel({
 					id: options.id
 				});
 
 				self.theBucket.fetch();
-			}
 
-			// Binding
-			self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
+				// Binding
+				self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
+			}
 		},
 
 
@@ -119,9 +136,15 @@ define([
 			console.log(bucket);
 
 			var template = _.template(mainTemplate);
-			template = template({bucket: bucket});
+			template = template({bucket: bucket, session: self.session.toJSON()});
 
 			$(self.elPage).html(template);
+
+			self.session.load();
+			console.log(self.session.toJSON());
+			if (!self.session.get('name')) {
+				self.initAddName();
+			}
 
 			return self;
 
@@ -343,6 +366,35 @@ define([
 
 			file.url = file.url + '/' + id;
 			file.destroy({success: function(){
+				self.theBucket.fetch();
+			}});
+		},
+
+		initAddName: function() {
+			var self = this;
+			var userTemplate = _.template(createUserTemplate);
+			self.$el.append(userTemplate);
+		},
+
+		addName: function(e) {
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $this = $(e.currentTarget);
+			var name = $this.find('input[name="name"]').val();
+
+			var user = new UserModel({
+				id: self.session.get('id'),
+				email: self.session.get('email'),
+				name: name
+			});
+			
+			user.save(null, {success: function(model, response){
+				response.token = self.session.get('token');
+				self.session.saveCredentials(response);
+				self.session.load();
 				self.theBucket.fetch();
 			}});
 		},

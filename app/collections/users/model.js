@@ -20,11 +20,10 @@ define([
 
         defaults: {
             name: '',
-            email: '',
-            password: '',
+            email: ''
         },
         
-        url : '/user',
+        urlRoot : '/user',
 
         initialize : function() {},
 
