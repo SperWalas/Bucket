@@ -71,7 +71,7 @@ define([
                         data.email = contributor.email;
                         data.id = contributor.id;
                         users.push(data);
-                        data.name = contributor.name || 'User';
+                        data.name = contributor.name || 'Utilisateur';
                         data.tasks = [];
                         taskToAdd = {
                             id : task.id,
