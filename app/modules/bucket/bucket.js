@@ -139,7 +139,6 @@ define([
 
 			var bucket = self.theBucket.toJSON();
 
-			console.log(bucket);
 
 			var template = _.template(mainTemplate);
 			template = template({bucket: bucket, session: self.session.toJSON()});
@@ -147,7 +146,7 @@ define([
 			$(self.elPage).html(template);
 
 			self.session.load();
-			console.log(self.session.toJSON());
+
 			if (!self.session.get('name')) {
 				self.initAddName();
 			}
@@ -398,7 +397,6 @@ define([
 			});
 			
 			user.save(null, {success: function(model, response){
-				console.log(response);
 				response[0].token = self.session.get('token');
 				self.session.saveCredentials(response[0]);
 				self.session.load();
@@ -663,7 +661,7 @@ define([
 			var self = this;		  	
 			var taskIdAsked = $(e.currentTarget).data("taskid");
 			var userIdAsked = $(e.currentTarget).data("userid");
-			console.log(taskIdAsked, ' id user : ' + userIdAsked);
+			
 			var task = new TaskModel({
 				id: taskIdAsked
 			});
@@ -707,15 +705,16 @@ define([
 
 			var comment = new CommentModel({
 				"author": author.email,
-				"userId": $form.find('#userId_comment'),
+				"userId": $form.find('#userId_comment').val(),
 				"name": author.name,
-				"content": $form.find('#text_comment'),
-				"task": $form.find('#taskId_comment')
+				"content": $form.find('#text_comment').val(),
+				"task": $form.find('#taskId_comment').val()
 			});
 
 			comment.save(null, {
-				success: function() {
-					console.log('comment add');
+				success: function(model, response){
+					self.hidePopup();
+					self.theBucket.fetch();
 				}
 			});
 
