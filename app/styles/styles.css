@@ -1231,6 +1231,9 @@ form button[type="submit"] {
 .popup_viewer--option--comment i svg path {
   fill: #bbb;
 }
+.popup_viewer--option--comment a > span {
+  display: none;
+}
 .popup_viewer--option--comment--window {
   display: none;
   position: absolute;
@@ -1292,6 +1295,26 @@ form button[type="submit"] {
 }
 .popup_viewer--option--comment--window form input[type="submit"] {
   display: none;
+}
+.popup_viewer--option--comment.is-comment {
+  background: #FF6C55;
+}
+.popup_viewer--option--comment.is-comment a > span {
+  display: inline-block;
+  margin-left: 10px;
+  color: #fff;
+  font-size: 1.6rem;
+  font-weight: 500;
+  vertical-align: middle;
+}
+.popup_viewer--option--comment.is-comment svg {
+  width: 100%;
+}
+.popup_viewer--option--comment.is-comment svg path {
+  fill: #fff;
+}
+.popup_viewer--option--comment.is-comment:hover {
+  background: #FF6C55;
 }
 .popup_viewer--option--comment:hover .popup_viewer--option--comment--window {
   display: block;

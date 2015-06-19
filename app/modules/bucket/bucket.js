@@ -15,6 +15,7 @@ define([
   'lodash',
   'backbone',
   'cookies',
+  'moment',
 
   'collections/buckets/model',
   'collections/tasks/model',
@@ -33,7 +34,7 @@ define([
   'pdfViewer',
 
 
-], function($, _, Backbone, Cookies, BucketModel, TaskModel, Session, FileModel, InviteModel, UserModel, mainTemplate, createPeopleTemplate, createUserTemplate, fileUploadTemplate, viewerPDFTemplate) {
+], function($, _, Backbone, Cookies, moment, BucketModel, TaskModel, Session, FileModel, InviteModel, UserModel, mainTemplate, createPeopleTemplate, createUserTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -502,17 +503,20 @@ define([
 		  	var files = _.where(task[0].files, { users : peopleIdAsked });
 		  	var numberFileAsked = _.findIndex(files, { id : fileIdAsked });
 
-		  	console.log(numberFileAsked);
-		  	console.log(files);
-
 		  	var user = _.where(bucket.contributors, { id : peopleIdAsked });
 
+		  	var comments = _.where(task[0].comments, { userId : peopleIdAsked });
+		  	comments = _.map(comments, function(comment) {
+		  		comment.dateFormated = moment(comment.createdAt, moment.ISO_8601).format('DD/MM/YYYY, HH:hh');
+		  		console.log(comment);
+		  		return comment;
+		  	});
 
 		  	var reviewed = ( _.size( _.where(files, { accepted : true })) == files.length && files.length > 0);
 
-		  	// Template with user, task, files, filesclicked
+		  	// Template with user, task, files, filesclicked, comments, session
 		  	var templateFile = _.template(viewerPDFTemplate);
-		 	templateFile = templateFile({ user : user[0], files: files, task : task[0], fileAsked : numberFileAsked, reviewed : reviewed, session: self.session.toJSON() });
+		 	templateFile = templateFile({ user : user[0], files: files, task : task[0], fileAsked : numberFileAsked, reviewed : reviewed, session: self.session.toJSON(), comments : comments });
 		 	self.$el.append(templateFile);
 
 		 	self.generatePDF(files);
