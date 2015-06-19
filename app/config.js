@@ -2,6 +2,7 @@ require.config({
 
 
   paths: {
+    'almond': '../vendors/almond/almond',
     'text' : '../vendors/requirejs-text/text', // RequireJS plugin
     "underscore": "../vendors/underscore/underscore",
     "lodash": "../vendors/lodash/lodash",
