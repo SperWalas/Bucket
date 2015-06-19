@@ -13,6 +13,7 @@ require.config({
     'pdfJs': '../vendors/pdfjs-dist/build/pdf',
     'pdfViewerCompatibility': '../vendors/pdfjs-dist/web/compatibility',
     'pdfViewer': '../vendors/pdfjs-dist/web/pdf_viewer',
+    'moment': '../vendors/moment/min/moment.min'
 
   },
 

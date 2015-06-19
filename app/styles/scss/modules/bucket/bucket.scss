@@ -791,6 +791,9 @@
 					}	
 				}  
 			}
+			a > span {
+				display:none; 
+			}
 			&--window {
 				display:none; 
 				position:absolute; 
@@ -846,6 +849,26 @@
 					input[type="submit"] {
 						display:none; 
 					}
+				} 
+			}
+			&.is-comment {
+				background:#FF6C55;
+				a > span {
+					display:inline-block; 
+					margin-left:10px;
+					color:#fff;
+					font-size:1.6rem; 
+					font-weight:500;
+					vertical-align:middle; 
+				}
+				svg {
+					width:100%; 
+					path {
+						fill:#fff;
+					}	
+				} 
+				&:hover {
+					background:#FF6C55;
 				} 
 			}
 			&:hover {
