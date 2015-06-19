@@ -508,7 +508,6 @@ define([
 		  	var comments = _.where(task[0].comments, { userId : peopleIdAsked });
 		  	comments = _.map(comments, function(comment) {
 		  		comment.dateFormated = moment(comment.createdAt, moment.ISO_8601).format('DD/MM/YYYY, HH:hh');
-		  		console.log(comment);
 		  		return comment;
 		  	});
 

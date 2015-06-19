@@ -168,7 +168,7 @@
 
 		&--option {
 			position:absolute;   
-			right: 21px; top: 20px;
+			right: 21px; top: 16px;
 			cursor: pointer;
 
 			&>div {
@@ -562,6 +562,38 @@
 		background-size:cover;
 	}
 	
+}
+
+
+.slot--file--comment {
+	display:block; 
+	width:340px; height:34px;
+	padding:0 10px;
+	margin:10px;
+	border-radius:4px;
+	box-shadow:0 1px 0 0 #EEEEEE;
+	background: $blue-primary;
+	overflow:hidden; 
+	line-height:34px; 
+	& > i {
+		display:inline-block;
+		vertical-align:middle; 
+		width:12px; height:11px; 
+		margin-right:7px; 
+		background:url('/app/img/icon/icon-comment.svg') center no-repeat;
+		background-size:cover;
+	}
+	p {
+		width:80%;
+		display:inline-block; 
+		vertical-align:middle; 
+		overflow:hidden; 
+		white-space: nowrap; 
+		text-overflow: ellipsis; 
+		color:#fff;
+		font-size:1.4rem; 
+		font-weight:500; 
+	}
 }
 
 

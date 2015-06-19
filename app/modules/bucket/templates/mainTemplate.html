@@ -51,7 +51,6 @@
 										<i></i>
 										<ul>
 											<li><a href="" class="btn-download" data-email="<%= contributor.email %>">Supprimer la personne</a></li>
-											<li><a href="" class="btn-archive"><i></i>Envoyer un rappel</a></li>
 										</ul>
 									</div>
 								</div>
@@ -109,6 +108,13 @@
 						">
 					
 							<% if( _.size(contributor.tasks[idx].file) > 0 ) {  %>
+
+								<% if( _.size(_.findLast(bucket.tasks[idx].comments, { userId: contributor.id })) > 0 ) { %>
+									<div class="slot--file--comment">
+										<i></i>
+										<p> <%= _.findLast(bucket.tasks[idx].comments, { userId: contributor.id }).content %></p>
+									</div>
+								<% } %>
 								
 								<% _.each(contributor.tasks[idx].file, function(file) { %>
 
