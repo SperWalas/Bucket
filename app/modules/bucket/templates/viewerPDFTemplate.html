@@ -31,21 +31,23 @@
 
 			</div>
 
-			<div class="popup_viewer--option">
-				<div class="popup_viewer--option--comment">
-					<a href="">
-						<i><svg width="21" height="18" viewBox="0 0 21 18" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><path d="M10.873 0c-5.591 0-10.127 3.551-10.127 7.922 0 1.939.895 3.715 2.377 5.092l-.475 2.403c-.399 2.145.336 2.516 2.046 1.455l2.314-1.625c1.19.387 2.497.597 3.864.597 5.592 0 10.127-3.548 10.127-7.922s-4.534-7.922-10.127-7.922z" sketch:type="MSShapeGroup" fill="#bbb"/></svg></i>
-					</a>
+			<% if (!session.invite) { %>
+				<div class="popup_viewer--option">
+					<div class="popup_viewer--option--comment">
+						<a href="">
+							<i><svg width="21" height="18" viewBox="0 0 21 18" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><path d="M10.873 0c-5.591 0-10.127 3.551-10.127 7.922 0 1.939.895 3.715 2.377 5.092l-.475 2.403c-.399 2.145.336 2.516 2.046 1.455l2.314-1.625c1.19.387 2.497.597 3.864.597 5.592 0 10.127-3.548 10.127-7.922s-4.534-7.922-10.127-7.922z" sketch:type="MSShapeGroup" fill="#bbb"/></svg></i>
+						</a>
+					</div>
+					<div class="popup_viewer--option--review <% if( reviewed ) { %> is-review <% } %>">
+						<a href="" data-taskId="<%= task.id %>" data-userId="<%= user.id %>">
+							<i>
+								<svg width="24" height="17" viewBox="0 0 24 17" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><path d="M8.679 16.993c-.569 0-1.121-.227-1.534-.626l-6.25-6.128c-.847-.835-.847-2.182 0-3.01.841-.831 2.216-.831 3.071 0l4.723 4.627 11.348-11.111c.847-.835 2.216-.835 3.072 0 .843.831.843 2.176 0 3.006l-12.882 12.621c-.415.397-.965.621-1.546.621z" sketch:type="MSShapeGroup" fill="#bbb"/></svg>
+							</i>
+							<span>Validé</span>
+						</a>
+					</div>
 				</div>
-				<div class="popup_viewer--option--review <% if( reviewed ) { %> is-review <% } %>">
-					<a href="" data-taskId="<%= task.id %>" data-userId="<%= user.id %>">
-						<i>
-							<svg width="24" height="17" viewBox="0 0 24 17" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><path d="M8.679 16.993c-.569 0-1.121-.227-1.534-.626l-6.25-6.128c-.847-.835-.847-2.182 0-3.01.841-.831 2.216-.831 3.071 0l4.723 4.627 11.348-11.111c.847-.835 2.216-.835 3.072 0 .843.831.843 2.176 0 3.006l-12.882 12.621c-.415.397-.965.621-1.546.621z" sketch:type="MSShapeGroup" fill="#bbb"/></svg>
-						</i>
-						<span>Validé</span>
-					</a>
-				</div>
-			</div>
+			<% } %>
 		</div>
 
 		<div class="popup--container">

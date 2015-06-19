@@ -509,7 +509,7 @@ define([
 
 		  	// Template with user, task, files, filesclicked
 		  	var templateFile = _.template(viewerPDFTemplate);
-		 	templateFile = templateFile({ user : user[0], files: files, task : task[0], fileAsked : numberFileAsked, reviewed : reviewed });
+		 	templateFile = templateFile({ user : user[0], files: files, task : task[0], fileAsked : numberFileAsked, reviewed : reviewed, session: self.session.toJSON() });
 		 	self.$el.append(templateFile);
 
 		 	self.generatePDF(files);
