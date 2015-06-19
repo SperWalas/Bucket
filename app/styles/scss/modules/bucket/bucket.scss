@@ -352,7 +352,7 @@
 				}
 
 				&.is-guest {
-					opacity: 0.5;
+					opacity: 0.3;
 				}
 
 			}
@@ -379,9 +379,11 @@
 					background:url('/app/img/icon/icon-reviewed.svg') center no-repeat;
 					background-size:cover;
 				}
-				.dropzone {
+				.dropzone,
+				.no-dropzone {
 					display:none; 
 				}
+
 			}
 		}
 	}

@@ -102,8 +102,10 @@
 								is-reviewed 
 							<% } else if ( _.size(contributor.tasks[idx].file) > 0 ) { %> 
 								is-contain-file 
+								<%= !session.invite || (session.email === contributor.email) ? '' : 'is-guest' %>
+							<% } else { %>
+								<%= !session.invite || (session.email === contributor.email) ? '' : 'is-guest' %>
 							<% } %>
-							<%= !session.invite || (session.email === contributor.email) ? '' : 'is-guest' %>
 						">
 					
 							<% if( _.size(contributor.tasks[idx].file) > 0 ) {  %>

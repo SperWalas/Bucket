@@ -843,7 +843,7 @@ form button[type="submit"] {
   display: none;
 }
 .page_bucket--doc--peoples li.is-guest {
-  opacity: 0.5;
+  opacity: 0.3;
 }
 .page_bucket--doc--people.is-reviewed {
   position: relative;
@@ -869,7 +869,8 @@ form button[type="submit"] {
   background: url("/app/img/icon/icon-reviewed.svg") center no-repeat;
   background-size: cover;
 }
-.page_bucket--doc--people.is-reviewed .dropzone {
+.page_bucket--doc--people.is-reviewed .dropzone,
+.page_bucket--doc--people.is-reviewed .no-dropzone {
   display: none;
 }
 .page_bucket--docs_new {
