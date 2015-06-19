@@ -18,7 +18,7 @@ define([
 
     var InviteModel = Backbone.Model.extend({
 
-        urlRoot: '/invite/',
+        urlRoot: '/invite',
 
         parse: function(response) {
 
