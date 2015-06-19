@@ -14,10 +14,13 @@ define([
   'jquery',
   'lodash',
   'backbone',
+  'cookies',
 
   'collections/buckets/model',
   'collections/tasks/model',
   'collections/session/model',
+  'collections/files/model',
+  'collections/invite/model',
 
   'text!modules/bucket/templates/mainTemplate.html',
   'text!modules/bucket/templates/createPeopleTemplate.html',
@@ -28,7 +31,7 @@ define([
   'pdfViewer',
 
 
-], function($, _, Backbone, BucketModel, TaskModel, Session, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
+], function($, _, Backbone, Cookies, BucketModel, TaskModel, Session, FileModel, InviteModel, mainTemplate, createPeopleTemplate, fileUploadTemplate, viewerPDFTemplate) {
 
 
 	var BucketView = Backbone.View.extend({
@@ -51,12 +54,12 @@ define([
 		 
 		events: {
 			'click .page_bucket .btn-add-people' : 'initPopupAddPeople',
-			'submit .page_bucket--docs_new form' : 'addTask',
 
 			'submit .popup_bucket_creation_people form' : 'addPeople',
 			'click .popup_bucket_creation_people .popup--btn-close' : 'hidePopup',
 			'click .page_bucket--people .btn-download' : 'removePeople',
 
+			'submit .page_bucket--docs_new form' : 'addTask',
 			'click .page_bucket--doc .btn-download' : 'removeTask',
 
 			'click .slot--file--info' : 'openPDF',
@@ -67,7 +70,9 @@ define([
 
 			'dragenter .dropzone' : 'highlightDropZone',
 			'dragleave .dropzone' : 'unhighlightDropZone',
+
 			'change input[type="file"]' : 'onDrop',
+			'click .slot--file--delete' : 'removeFile'
 		},
 
 
@@ -76,20 +81,25 @@ define([
 		 *	Init Home view 
 		 */
 
-		initialize: function() {
+		initialize: function(options) {
 
 			var self = this;
 
 			self.session = new Session();
 
-			// Get the bucket
-			self.theBucket = new BucketModel({
-				id: self.id
-			});
-			self.theBucket.fetch();
+			if (self.session.invited() || options.token) {
+				self.theBucket = new InviteModel({
+					token: options.token
+				});
 
-			console.log(self.theBucket);
+				self.theBucket.save();
+			} else {
+				self.theBucket = new BucketModel({
+					id: options.id
+				});
 
+				self.theBucket.fetch();
+			}
 
 			// Binding
 			self.listenTo(self.theBucket, 'reset add change remove', self.render, self);
@@ -108,6 +118,8 @@ define([
 			var self = this;
 
 			var bucket = self.theBucket.toJSON();
+
+			console.log(bucket);
 
 			var template = _.template(mainTemplate);
 			template = template({bucket: bucket});
@@ -264,9 +276,9 @@ define([
 
 				file.sizeFormated = self.fileSizeSI(file.size);
 
-			 	var templateFile = _.template(fileUploadTemplate);
-			 	templateFile = templateFile(file);
-			 	$slot.prepend(templateFile);
+				var templateFile = _.template(fileUploadTemplate);
+				templateFile = templateFile(file);
+				$slot.prepend(templateFile);
 			});
 
 			self.addFile(e);
@@ -288,20 +300,54 @@ define([
 				data.append('files', file);
 			});
 
-			$.ajax({
-				url: 'https://damp-ridge-1156.herokuapp.com/file?token=' + token + '&contributor=' + contributor + '&task=' + task + '&erase=' + erase,
+
+			// With file model
+			var file = new FileModel();
+
+			file.url = file.url + '?contributor=' + contributor + '&task=' + task + '&erase=' + erase;
+			file.save(null, {
 				data: data,
 				contentType: false,
-        		processData: false,
-				crossDomain: true,
-    			xhrFields: {
-    				withCredentials: true
-    			},
-				type: 'POST',
-				success: function(data) {
-					// Handle success event
+				processData: false,
+				success: function() {
+					self.theBucket.fetch();
 				}
 			});
+
+			// // With standalone js
+			// $.ajax({
+			// 	url: 'https://damp-ridge-1156.herokuapp.com/file?token=' + token + '&contributor=' + contributor + '&task=' + task + '&erase=' + erase,
+			// 	data: data,
+			// 	contentType: false,
+			// 	processData: false,
+			// 	crossDomain: true,
+			// 	xhrFields: {
+			// 		withCredentials: true
+			// 	},
+			// 	type: 'POST',
+			// 	success: function(data) {
+			// 		// Handle success event
+			// 	}
+			// });
+		},
+
+		removeFile: function(e) {
+
+			var self = this;
+
+			e.preventDefault();
+			e.stopPropagation();
+
+			var $this = $(e.currentTarget);
+			var id = $this.data('id');
+			var file = new FileModel({
+				id: id
+			});
+
+			file.url = file.url + '/' + id;
+			file.destroy({success: function(){
+				self.theBucket.fetch();
+			}});
 		},
 
 		/**
@@ -356,26 +402,26 @@ define([
 		dropFile:function(e) {
 
 			var self = this;
-		 	var $input = $(e.currentTarget);
-		 	var $slot = $input.parent().parent();
-		 	var $dropZone = $slot.find('.dropzone');
+			var $input = $(e.currentTarget);
+			var $slot = $input.parent().parent();
+			var $dropZone = $slot.find('.dropzone');
 
-		 	// Add class, prepare style
-		 	$dropZone.removeClass('is-hovered');
-		 	$slot.addClass('is-contain-file');
+			// Add class, prepare style
+			$dropZone.removeClass('is-hovered');
+			$slot.addClass('is-contain-file');
 
-		 	// Get file
-		 	var fileDropped = e.currentTarget.files;
+			// Get file
+			var fileDropped = e.currentTarget.files;
 
-		 	_.each(fileDropped, function(file) {
+			_.each(fileDropped, function(file) {
 
-		 		file.sizeFormated = self.fileSizeSI(file.size);
+				file.sizeFormated = self.fileSizeSI(file.size);
 
-			 	var templateFile = _.template(fileUploadTemplate);
-			 	templateFile = templateFile(file);
-			 	$slot.prepend(templateFile);
+				var templateFile = _.template(fileUploadTemplate);
+				templateFile = templateFile(file);
+				$slot.prepend(templateFile);
 
-		 	});
+			});
 
 
 		 },
@@ -388,29 +434,30 @@ define([
 
 		openPDF:function(e) {
 
-		  	e.stopPropagation();
-		  	e.preventDefault();
+			e.stopPropagation();
+			e.preventDefault();
 
+			// Get all data
 		  	var self = this; 
-		  	var taskIdAsked = $(e.currentTarget).data("taskId");
+		  	var taskIdAsked = $(e.currentTarget).data("taskid");
 		  	var fileIdAsked = $(e.currentTarget).data("fileid");
-		  	var peopleIdAsked = $(e.currentTarget).data("contributorId");
+		  	var peopleIdAsked = $(e.currentTarget).data("contributorid");
 
 		  	bucket = self.theBucket.toJSON();
 
-		  	var task =_.where(bucket.tasks, function(task) {
-		  		return (task.id == taskIdAsked);
-		  	});
+		  	var task = _.where(bucket.tasks, { id : taskIdAsked });
 
 		  	var files = task[0].files;
 		  	var numberFileAsked = _.findIndex(files, { id : fileIdAsked });
 
-		  	var user = _.where(bucket.contributors, function(contributor) {
-		  		return (contributor.id == peopleIdAsked);
-		  	});
+		  	var user = _.where(bucket.contributors, { id : peopleIdAsked });
 
+
+		  	var reviewed = ( _.size( _.where(files, { accepted : true })) == files.length && files.length > 0);
+
+		  	// Template with user, task, files, filesclicked
 		  	var templateFile = _.template(viewerPDFTemplate);
-		 	templateFile = templateFile({ user : user[0], files: files, task : task[0], fileAsked : numberFileAsked });
+		 	templateFile = templateFile({ user : user[0], files: files, task : task[0], fileAsked : numberFileAsked, reviewed : reviewed });
 		 	self.$el.append(templateFile);
 
 		 	self.generatePDF(files);
@@ -418,6 +465,7 @@ define([
 			$('.popup_viewer--pdfs').css('left', -numberFileAsked * $('.popup_viewer--pdfs').width() )
 									.width( files.length * $('.popup_viewer--pdfs').width() + 30 );
 			$('.popup_viewer--navigate ul li').hide().eq(numberFileAsked).show();
+			$('.popup_viewer--pdfs--option').hide().eq(numberFileAsked).show();
 
 		},
 
@@ -477,8 +525,8 @@ define([
 			    canvas.height = viewport.height;
 			    canvas.width = viewport.width;
 
-			    //Draw it on the canvas
-			    page.render({canvasContext: context, viewport: viewport});
+				//Draw it on the canvas
+				page.render({canvasContext: context, viewport: viewport});
 
 			    //Add it to the web page
 			    $('.popup_viewer--pdf').last().append( canvas );
@@ -492,9 +540,7 @@ define([
 			};
 
 
-
 		},
-
 
 
 		/** 
@@ -517,6 +563,7 @@ define([
 			$('.popup_viewer--pdfs').css('left', -(pdfNow - 1) * $('.popup--container').width() );
 			$('.popup_viewer--navigate--count span').text(pdfNow);
 			$('.popup_viewer--navigate ul li').hide().eq(pdfNow - 1).show();
+			$('.popup_viewer--pdfs--option').hide().eq(pdfNow - 1).show();
 
 		},		
 
@@ -536,6 +583,7 @@ define([
 			$('.popup_viewer--pdfs').css('left', -(pdfNow - 1) * $('.popup--container').width() );
 			$('.popup_viewer--navigate--count span').text(pdfNow);
 			$('.popup_viewer--navigate ul li').hide().eq(pdfNow - 1).show();
+			$('.popup_viewer--pdfs--option').hide().eq(pdfNow - 1).show();
 
 		},
 
@@ -551,21 +599,30 @@ define([
 			e.preventDefault();
 			e.stopPropagation();
 
-			var self = this;
+			var self = this;		  	
+			var taskIdAsked = $(e.currentTarget).data("taskid");
+			var userIdAsked = $(e.currentTarget).data("userid");
+			console.log(taskIdAsked, ' id user : ' + userIdAsked);
+			var task = new TaskModel({
+				id: taskIdAsked
+			});
+			task.fetch({
+				success:function(){
 
-			//self.
+					var taskJson = task.toJSON();
+					var newFiles = _.map(taskJson.files, function(file) {
+											if (file.tasks == taskIdAsked && file.users == userIdAsked)
+												file.accepted = true;
+											return file;
+										});
 
+					task.set('files', newFiles);
+					task.save({success: function(){
+						self.theBucket.fetch();
+					}});
 
-
-			// var $this = $(e.currentTarget);
-			// var id = $this.data('id');
-			// var task = new TaskModel({
-			// 	id: id
-			// });
-			// task.destroy({success: function(){
-			// 	self.theBucket.fetch();
-			// }});
-
+				}
+			});
 
 		},
 

@@ -31,11 +31,21 @@ define([
 			// Change the `url` property of options to begin with the URL from settings
 			// This works because the options object gets sent as the jQuery ajax options, which
 			// includes the `url` property
+			
+			var token = '';
+			
+			if (Cookies.get('token')) {
+				token =  'token=' + Cookies.get('token');
+			}
 
 			if (model.url === '/session') {
 				options.url = app.settings.api + model.url;
 			} else {
-				options.url = app.settings.api + (_.isFunction(model.url) ? model.url() : model.url) + '?token=' + Cookies.get('token');
+				if (String(model.url).match(/\?./)) {
+					options.url = app.settings.api + (_.isFunction(model.url) ? model.url() : model.url) + '&' + token;
+				} else {
+					options.url = app.settings.api + (_.isFunction(model.url) ? model.url() : model.url) + '?' + token;
+				}
 			}
 
 			options.crossDomain = true;

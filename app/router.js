@@ -21,7 +21,7 @@ define([
 
         // All Route
         routes: {
-            "(:module)(/)(:id)": "render"
+            "(:module)(/)(:id)(/)(:token)": "render"
         },
 
 
@@ -53,7 +53,7 @@ define([
         },
 
         // Render view asked
-        render: function(module, id) {
+        render: function(module, id, token) {
 
             var self = this;
 
@@ -61,25 +61,58 @@ define([
             module = (!module) ? this.defaultView : module;
             module = module.toLowerCase();
 
-            self.session.load();
+            if (id === 'invite' && token && !self.session.invited()) {
 
-            if (module !== this.defaultView) {
-                if (!self.session.authenticated()) {
-                    module = this.defaultView;
-                    this.navigate('/', true);
-                }
+                self.session.invite(token, function(){
+                    self.headerView = new HeaderView();
+                });
+
             } else {
-                if (self.session.authenticated()) {
-                    module = 'board';
-                    this.navigate('/board', true);
+
+                self.session.load();
+
+                if (!self.session.authenticated()) {
+
+                    console.log('Stranger');
+
+                    // If you are a stranger, you can only see the home
+                    if (module !== this.defaultView) {
+                        module = this.defaultView;
+                        this.navigate('/', true);
+                    }
+
+                } else if (self.session.invited()) {
+
+                    console.log('Guest');
+
+                    token = self.session.get('token');
+
+                    // If you are a guest, you can go on home or bucket
+                    if (module !== this.defaultView || module !== 'bucket') {
+                        module = 'bucket';
+                        this.navigate('/bucket', true);
+                    }
+
+                } else {
+
+                    console.log('Authenticated');
+
+                    // if you are authenticated, you can go everywhere, except on home
+                    if (module === this.defaultView) {
+                        module = 'board';
+                        this.navigate('/board', true);
+                    }
+
                 }
+
             }
 
             // Load view asked 
             if(self[module+'View']) {
 
                 self.currentView = new self[module+'View']({
-                    id: id
+                    id: id,
+                    token: token
                 });
 
                 console.log("Module loaded : " + module );

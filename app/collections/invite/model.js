@@ -2,8 +2,8 @@
 
 /**
  *  model.js
- *  @path : /app/collections/buckets/
- *  @desc : Model to get a bucket
+ *  @path : /app/collections/invite/
+ *  @desc : Model to get a bucket from invite
  *
  *  @return     BucketModel
  */
@@ -16,19 +16,9 @@ define([
     
 ], function($, _, Backbone){
 
-    var BucketModel = Backbone.Model.extend({
+    var InviteModel = Backbone.Model.extend({
 
-        defaults: {
-            name: '',
-            authors: [],
-            tasks: [],
-            users: []
-        },
-        
-        urlRoot: '/bucket',
-
-        // On init model
-        initialize : function() {},
+        urlRoot: '/invite/',
 
         parse: function(response) {
 
@@ -63,7 +53,6 @@ define([
                     if (exist === undefined) {
                         data = {};
                         data.email = contributor.email;
-                        data.id = contributor.id;
                         users.push(data);
                         data.name = contributor.name || 'User';
                         data.tasks = [];
@@ -99,7 +88,7 @@ define([
             return response;
         },
 
-
+        
         /**
          *  Convert size to readable
          */
@@ -108,9 +97,8 @@ define([
              return (b=Math,c=b.log,d=1e3,e=c(a)/c(d)|0,a/b.pow(d,e)).toFixed(2)+' '+(e?'kMGTPEZY'[--e]+'B':'Bytes');
         },
 
-
     });
 
-    return BucketModel;
+    return InviteModel;
 
 });
