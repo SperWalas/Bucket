@@ -37,6 +37,7 @@ define([
             var users = [];
             var accomplished = 0;
             var percent = 0;
+            var filesToReview = 0;
             var files = 0;
             var data;
             var exist;
@@ -44,17 +45,22 @@ define([
 
             _.forEach(response.tasks, function(task) {
 
-                if (task.accomplish) {
-                    accomplished++;
-                }
 
                 _.forEach(task.files, function(file){
                     if (!file.accepted) {
-                        files++;
+                        filesToReview++;
                     }
+                    files++;
                 });
 
                 _.forEach(task.contributors, function(contributor) {
+
+                    
+                    var filesOfContributor = _.where(task.files, { users : contributor.id });
+
+                    if ( _.size( _.where(task.files, { users : contributor.id, accepted : true })) == filesOfContributor.length && filesOfContributor.length > 0 ) {
+                        accomplished++;
+                    }
 
                     exist = _.find(contributors, function(value) {
                         return value.email === contributor.email;
@@ -87,13 +93,14 @@ define([
 
 
             if (typeof response.tasks !== 'undefined' && response.tasks.length > 0) {
-                percent = (accomplished / response.tasks.length) * 100;
+                percent = Math.round((accomplished / (response.tasks.length * response.tasks[0].contributors.length) ) * 100);
             }
 
             response.contributors = contributors;
             response.users = users;
             response.percent = percent;
             response.accomplished = accomplished;
+            response.filesToReview = filesToReview;
             response.files = files;
 
             return response;

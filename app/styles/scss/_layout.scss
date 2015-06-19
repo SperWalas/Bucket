@@ -22,7 +22,15 @@
 		display:inline-block; 
 		vertical-align:middle; 
 		height:79px;
-		line-height:80px; 
+		line-height:80px;
+		i {
+			display:inline-block; 
+			width:50px; height:46px; 
+			vertical-align:middle; 
+			margin-right:15px; 
+			background:url('/app/img/icon/icon-bucket.svg') center no-repeat;
+			background-size:100%; 
+		} 
 	}
 
 	&--nav {
@@ -149,8 +157,7 @@
 
 
 .page {
-
-
+	overflow: hidden;
 }
 
 
@@ -165,9 +172,15 @@
 
 .page_home {
 	width:1042px; 
-	position:absolute;
-	left:50%; top:50%; 
-	@include transform(translate(-50%, -50%));
+	margin:100px auto; 
+
+	&--illu {
+		display:block; 
+		width:668px; height:250px; 
+		margin: 0 auto 120px; 
+		background:url('/app/img/illu-home.svg') center no-repeat;
+		background-size: cover;
+	}
 
 	&--intro {
 		width:560px;

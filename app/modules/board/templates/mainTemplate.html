@@ -29,12 +29,14 @@
 
 			<% _.each(buckets, function(bucket) { %>
 
-				<li class="card_bucket <%= bucket.percent === 100 ? 'is-complete' : '' %> <%= bucket.files > 0 ? 'is-contains' : '' %>">
+				<li class="card_bucket <%= bucket.percent === 100 ? 'is-complete' : '' %> <%= bucket.filesToReview > 0 ? 'is-update' : '' %> <%= bucket.files > 0 ? 'is-contains' : '' %> ">
 					<div>
-					<% if (bucket.percent === 100) { %>
+					<% if (bucket.percent === 100 || bucket.files > 0) { %>
 						<div class="card_bucket--notification">
 						<% if (bucket.percent === 100) { %>
 							<span>Bucket complet !</span>
+						<% } else if (bucket.filesToReview > 0) { %>
+							<span><%= bucket.filesToReview %> fichier<% if (bucket.filesToReview > 1) { %>s<% } %> à examiner</span>
 						<% } %>
 						</div>
 					<% } %>

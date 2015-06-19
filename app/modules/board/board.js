@@ -89,6 +89,7 @@ define([
 
 			var self = this;
 			var buckets = self.buckets.toJSON();
+			
 			var template = _.template(mainTemplate);
 			template = template({buckets: buckets, files: self.getFilesNumber(buckets)});
 
@@ -169,7 +170,7 @@ define([
 			var files = 0;
 
 			_.forEach(buckets, function(bucket){
-				files += bucket.files;
+				files += bucket.filesToReview;
 			});
 
 			return files;

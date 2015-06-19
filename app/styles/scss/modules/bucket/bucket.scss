@@ -363,17 +363,17 @@
 			&.is-reviewed {
 				position:relative; 
 				.slot--file {
-					opacity:0.5;
+					opacity:0.4;
 					&:hover {
 						opacity:1;
 					}
 				}
 				&::after {
 					content:'';
-					width:34px; height:34px; 
+					width:37px; height:37px; 
 					position:absolute; 
-					bottom:30px;
-					right:30px;
+					bottom:25px;
+					right:25px;
 					z-index:2;
 					background:url('/app/img/icon/icon-reviewed.svg') center no-repeat;
 					background-size:cover;

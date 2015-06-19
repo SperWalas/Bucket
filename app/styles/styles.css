@@ -233,6 +233,15 @@ form button[type="submit"] {
   height: 79px;
   line-height: 80px;
 }
+.header--logo i {
+  display: inline-block;
+  width: 50px;
+  height: 46px;
+  vertical-align: middle;
+  margin-right: 15px;
+  background: url("/app/img/icon/icon-bucket.svg") center no-repeat;
+  background-size: 100%;
+}
 .header--nav {
   float: right;
   height: 79px;
@@ -340,19 +349,24 @@ form button[type="submit"] {
   min-height: calc(100vh - 50px);
 }
 
+.page {
+  overflow: hidden;
+}
+
 /**
  *	Home
  */
 .page_home {
   width: 1042px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  -webkit-transform: translate(-50%, -50%);
-  -moz-transform: translate(-50%, -50%);
-  -ms-transform: translate(-50%, -50%);
-  -o-transform: translate(-50%, -50%);
-  transform: translate(-50%, -50%);
+  margin: 100px auto;
+}
+.page_home--illu {
+  display: block;
+  width: 668px;
+  height: 250px;
+  margin: 0 auto 120px;
+  background: url("/app/img/illu-home.svg") center no-repeat;
+  background-size: cover;
 }
 .page_home--intro {
   width: 560px;
@@ -849,18 +863,18 @@ form button[type="submit"] {
   position: relative;
 }
 .page_bucket--doc--people.is-reviewed .slot--file {
-  opacity: 0.5;
+  opacity: 0.4;
 }
 .page_bucket--doc--people.is-reviewed .slot--file:hover {
   opacity: 1;
 }
 .page_bucket--doc--people.is-reviewed::after {
   content: '';
-  width: 34px;
-  height: 34px;
+  width: 37px;
+  height: 37px;
   position: absolute;
-  bottom: 30px;
-  right: 30px;
+  bottom: 25px;
+  right: 25px;
   z-index: 2;
   background: url("/app/img/icon/icon-reviewed.svg") center no-repeat;
   background-size: cover;
@@ -1498,6 +1512,7 @@ form button[type="submit"] {
   height: 248px;
   float: left;
   margin-right: 38px;
+  margin-bottom: 38px;
   /* STATES */
 }
 .card_bucket > div {
