@@ -499,8 +499,11 @@ define([
 
 		  	var task = _.where(bucket.tasks, { id : taskIdAsked });
 
-		  	var files = task[0].files;
+		  	var files = _.where(task[0].files, { users : peopleIdAsked });
 		  	var numberFileAsked = _.findIndex(files, { id : fileIdAsked });
+
+		  	console.log(numberFileAsked);
+		  	console.log(files);
 
 		  	var user = _.where(bucket.contributors, { id : peopleIdAsked });
 
@@ -669,9 +672,12 @@ define([
 										});
 
 					task.set('files', newFiles);
-					task.save({success: function(){
-						self.theBucket.fetch();
-					}});
+					task.save(null, {
+						success: function(){
+							self.hidePopup();
+							self.theBucket.fetch();
+						}
+					});
 
 				}
 			});
